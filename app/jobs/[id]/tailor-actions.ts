@@ -4,6 +4,10 @@ import type { Evidence } from "@/lib/agent/evidence";
 import { aiChoiceFrom } from "@/lib/ai-choice";
 import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
 import { db } from "@/lib/db";
+import {
+  generateInterviewPrep,
+  type InterviewPrep,
+} from "@/lib/interview-prep";
 import { JobExtraction } from "@/lib/job-extraction";
 import { getSession } from "@/lib/session";
 import { generateTailored, type Tailored } from "@/lib/tailor";
@@ -48,6 +52,53 @@ export async function tailorApplication(
     return {
       error:
         aiErrorMessage(error) ?? "Couldn't write the tailored text. Try again.",
+    };
+  }
+}
+
+export type InterviewState = { error?: string; result?: InterviewPrep };
+
+export async function prepareInterview(
+  _prev: InterviewState,
+  formData: FormData,
+): Promise<InterviewState> {
+  const session = await getSession();
+  if (!session) return { error: "Your session ended. Sign in again." };
+
+  const analysisId = String(formData.get("analysisId") ?? "");
+  // Only analyses of the signed-in user's own jobs.
+  const analysis = await db.analysis.findFirst({
+    where: { id: analysisId, status: "DONE", job: { userId: session.user.id } },
+    select: { evidence: true, job: { select: { extracted: true } } },
+  });
+  if (!analysis) return { error: "Run the fit analysis first." };
+
+  const job = JobExtraction.safeParse(analysis.job.extracted);
+  if (!job.success) {
+    return { error: "This job's requirements couldn't be read." };
+  }
+
+  const profile = await db.profile.findUnique({
+    where: { userId: session.user.id },
+    select: { cvText: true, repos: true },
+  });
+  if (!profile?.cvText) return { error: "Upload your CV in Set up first." };
+
+  try {
+    const result = await generateInterviewPrep({
+      job: job.data,
+      evidence: (analysis.evidence ?? []) as Evidence[],
+      cvText: profile.cvText,
+      repos: profile.repos,
+      aiChoice: aiChoiceFrom(formData),
+    });
+    return { result };
+  } catch (error) {
+    console.error("[interview]", errorSummary(error));
+    return {
+      error:
+        aiErrorMessage(error) ??
+        "Couldn't write the interview prep. Try again.",
     };
   }
 }

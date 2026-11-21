@@ -17,6 +17,7 @@ import { JobExtraction } from "@/lib/job-extraction";
 import { requireSession } from "@/lib/session";
 
 import { AnalysisSection } from "./analysis-section";
+import { InterviewPanel } from "./interview-panel";
 import { JobTabs } from "./job-tabs";
 import { TailorPanel } from "./tailor-panel";
 
@@ -172,26 +173,45 @@ async function TailorSection({ jobId }: { jobId: string }) {
     select: { id: true },
   });
 
+  const needsAnalysis = (
+    <p className="text-sm text-muted-foreground">
+      Run <strong>Analyse my fit</strong> on the Report tab first, so this can
+      use the evidence it finds.
+    </p>
+  );
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Tailor your application</CardTitle>
-        <CardDescription>
-          CV bullets and a cover note for this job, written only from your CV
-          and the evidence Fitcheck found.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {analysis ? (
-          <TailorPanel analysisId={analysis.id} />
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Run <strong>Analyse my fit</strong> on the Report tab first, so the
-            tailored text can use the evidence it finds.
-          </p>
-        )}
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Tailor your application</CardTitle>
+          <CardDescription>
+            CV bullets and a cover note for this job, written only from your CV
+            and the evidence Fitcheck found.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {analysis ? <TailorPanel analysisId={analysis.id} /> : needsAnalysis}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Interview prep</CardTitle>
+          <CardDescription>
+            10 questions this interviewer is likely to ask, with answers based
+            on your own projects, including the hard ones about your gaps.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {analysis ? (
+            <InterviewPanel analysisId={analysis.id} />
+          ) : (
+            needsAnalysis
+          )}
+        </CardContent>
+      </Card>
+    </>
   );
 }
 

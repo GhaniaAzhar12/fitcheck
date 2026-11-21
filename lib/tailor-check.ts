@@ -19,6 +19,29 @@ export function numbersIn(text: string): string[] {
 }
 
 /**
+ * Keeps a "source project" only if it names something real: a project or
+ * employer mentioned in the CV, or one of the user's repos. Otherwise null.
+ */
+export function verifiedSource(
+  source: string | null,
+  cvText: string,
+  repos: string[],
+): string | null {
+  const name = source?.trim();
+  if (!name) return null;
+  const lower = name.toLowerCase();
+  const repoMatch = repos.find((r) => {
+    const short = r.split("/")[1]?.toLowerCase() ?? "";
+    return lower === r.toLowerCase() || (short && lower.includes(short));
+  });
+  if (repoMatch) return repoMatch;
+  // Every word of 4+ letters must appear in the CV (ignores "the", "app"…).
+  const cv = cvText.toLowerCase();
+  const words = lower.split(/[^a-z0-9.]+/).filter((w) => w.length >= 4);
+  return words.length && words.every((w) => cv.includes(w)) ? name : null;
+}
+
+/**
  * Numbers in `text` that never appear in `sources`. Years like 2023 are
  * included: a wrong date is as bad as a wrong metric.
  */

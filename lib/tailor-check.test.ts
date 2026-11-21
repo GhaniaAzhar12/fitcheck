@@ -1,6 +1,30 @@
 import { describe, expect, test } from "bun:test";
 
-import { numbersIn, unverifiedNumbers } from "./tailor-check";
+import { numbersIn, unverifiedNumbers, verifiedSource } from "./tailor-check";
+
+describe("verifiedSource", () => {
+  const cv =
+    "LoadsRunner logistics platform. HappyGifters Stripe checkout. E-Prep test platform.";
+  const repos = ["jane/fitcheck", "jane/weather_app"];
+
+  test("keeps projects named in the CV", () => {
+    expect(verifiedSource("LoadsRunner", cv, repos)).toBe("LoadsRunner");
+    expect(verifiedSource("HappyGifters checkout", cv, repos)).toBe(
+      "HappyGifters checkout",
+    );
+  });
+
+  test("maps repo mentions to the full repo name", () => {
+    expect(verifiedSource("fitcheck", cv, repos)).toBe("jane/fitcheck");
+    expect(verifiedSource("The Fitcheck app", cv, repos)).toBe("jane/fitcheck");
+  });
+
+  test("drops made-up projects and empty values", () => {
+    expect(verifiedSource("ShopMaster e-commerce", cv, repos)).toBeNull();
+    expect(verifiedSource("  ", cv, repos)).toBeNull();
+    expect(verifiedSource(null, cv, repos)).toBeNull();
+  });
+});
 
 const CV =
   "Led a 6-person team on LoadsRunner (+35% ops efficiency). Cut page loads by 30%. 3+ years with React. Served 1,200 users since 2023.";
