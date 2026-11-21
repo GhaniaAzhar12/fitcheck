@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 
 import { type CreateJobState, createJob } from "../actions";
 
@@ -12,9 +13,15 @@ const initialState: CreateJobState = {};
 
 export function NewJobForm() {
   const [state, formAction, pending] = useActionState(createJob, initialState);
+  // The model choice saved in step 3 of setup (key stays in this browser).
+  const [aiFields, setAiFields] = useState<Record<string, string>>({});
+  useEffect(() => setAiFields(aiFormFields(loadAiSettings())), []);
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
+      {Object.entries(aiFields).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
       <div className="flex flex-col gap-2">
         <label htmlFor="url" className="text-sm font-medium">
           Job link

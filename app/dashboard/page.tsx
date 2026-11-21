@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { SignOutButton } from "@/components/sign-out-button";
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { db } from "@/lib/db";
 import { JobExtraction } from "@/lib/job-extraction";
+import { isOnboarded } from "@/lib/onboarding";
 import { requireSession } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Dashboard · Fitcheck" };
@@ -102,6 +104,13 @@ async function JobList() {
 async function UserCard() {
   const { user } = await requireSession();
 
+  // New users set up their CV and repos before anything else.
+  const profile = await db.profile.findUnique({
+    where: { userId: user.id },
+    select: { cvText: true, repos: true },
+  });
+  if (!isOnboarded(profile)) redirect("/onboarding");
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
@@ -116,8 +125,17 @@ async function UserCard() {
         ) : null}
         <div className="flex flex-1 flex-col gap-1">
           <CardTitle>Hi, {user.name}</CardTitle>
-          <CardDescription>{user.email}</CardDescription>
+          <CardDescription>
+            {user.email} · {profile?.repos.length} evidence repo
+            {profile?.repos.length === 1 ? "" : "s"}
+          </CardDescription>
         </div>
+        <Link
+          href="/onboarding?step=1"
+          className={buttonVariants({ variant: "ghost" })}
+        >
+          Set up
+        </Link>
         <SignOutButton />
       </CardHeader>
     </Card>

@@ -4,6 +4,7 @@ import { APICallError, NoObjectGeneratedError } from "ai";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { aiChoiceFrom } from "@/lib/ai-choice";
 import { db } from "@/lib/db";
 import { extractJob, JobTextError } from "@/lib/extract-job";
 import { fetchJobPage, JobPageError } from "@/lib/fetch-job-page";
@@ -49,7 +50,8 @@ export async function createJob(
   try {
     // Pasted text wins: it's what the user actually sees.
     const rawText = text || (await fetchJobPage(url));
-    const result = await extractJob(rawText);
+    // The visitor's own key (if any) is used for this call only.
+    const result = await extractJob(rawText, aiChoiceFrom(formData));
 
     const job = await db.job.create({
       data: {
@@ -62,7 +64,12 @@ export async function createJob(
     });
     jobId = job.id;
   } catch (error) {
-    console.error("[createJob]", error);
+    // Log a summary only: full errors can echo request details.
+    console.error("[createJob]", {
+      name: error instanceof Error ? error.name : typeof error,
+      status: APICallError.isInstance(error) ? error.statusCode : undefined,
+      message: error instanceof Error ? error.message.slice(0, 300) : undefined,
+    });
     return { ...raw, error: friendlyError(error) };
   }
 
@@ -88,7 +95,7 @@ function friendlyError(error: unknown): string {
       return "The AI model is busy right now. Try again in a moment.";
     }
     if (error.statusCode === 401 || error.statusCode === 403) {
-      return "The AI key isn't working. Check GOOGLE_GENERATIVE_AI_API_KEY in .env.";
+      return "The AI key was rejected. If you use your own key, check it in Set up → AI model.";
     }
   }
   if (NoObjectGeneratedError.isInstance(error)) {

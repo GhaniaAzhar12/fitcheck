@@ -34,7 +34,11 @@ export type ExtractJobResult = {
   truncated: boolean;
 };
 
-export async function extractJob(rawText: string): Promise<ExtractJobResult> {
+export async function extractJob(
+  rawText: string,
+  /** The visitor's own model choice; defaults to the app's model. */
+  modelOptions?: Parameters<typeof getModel>[0],
+): Promise<ExtractJobResult> {
   const text = rawText.trim();
   if (text.length < 50) {
     throw new JobTextError(
@@ -43,7 +47,7 @@ export async function extractJob(rawText: string): Promise<ExtractJobResult> {
   }
   const truncated = text.length > MAX_CHARS;
 
-  const { provider, modelId, model } = getModel();
+  const { provider, modelId, model } = getModel(modelOptions);
   const started = Date.now();
 
   const { output, usage } = await generateText({
