@@ -4,6 +4,7 @@ import type { Evidence } from "@/lib/agent/evidence";
 import { aiChoiceFrom } from "@/lib/ai-choice";
 import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
 import { db } from "@/lib/db";
+import type { Prisma } from "@/lib/generated/prisma/client";
 import {
   generateInterviewPrep,
   type InterviewPrep,
@@ -45,6 +46,11 @@ export async function tailorApplication(
       evidence: (analysis.evidence ?? []) as Evidence[],
       cvText: profile.cvText,
       aiChoice: aiChoiceFrom(formData),
+    });
+    // Saved so later visits show it without another model call.
+    await db.analysis.update({
+      where: { id: analysisId },
+      data: { tailored: result as unknown as Prisma.InputJsonValue },
     });
     return { result };
   } catch (error) {
@@ -91,6 +97,11 @@ export async function prepareInterview(
       cvText: profile.cvText,
       repos: profile.repos,
       aiChoice: aiChoiceFrom(formData),
+    });
+    // Saved so later visits show it without another model call.
+    await db.analysis.update({
+      where: { id: analysisId },
+      data: { interview: result as unknown as Prisma.InputJsonValue },
     });
     return { result };
   } catch (error) {

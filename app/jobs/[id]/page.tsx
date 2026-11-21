@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { db } from "@/lib/db";
 import { JobExtraction } from "@/lib/job-extraction";
+import { readInterview, readTailored } from "@/lib/saved-tailoring";
 import { requireSession } from "@/lib/session";
 
 import { AnalysisSection } from "./analysis-section";
@@ -170,8 +171,11 @@ async function TailorSection({ jobId }: { jobId: string }) {
   const analysis = await db.analysis.findFirst({
     where: { jobId, status: "DONE" },
     orderBy: { createdAt: "desc" },
-    select: { id: true },
+    select: { id: true, tailored: true, interview: true },
   });
+  // Saved results: shown as-is, no model call on reload.
+  const savedTailored = readTailored(analysis?.tailored);
+  const savedInterview = readInterview(analysis?.interview);
 
   const needsAnalysis = (
     <p className="text-sm text-muted-foreground">
@@ -191,7 +195,11 @@ async function TailorSection({ jobId }: { jobId: string }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {analysis ? <TailorPanel analysisId={analysis.id} /> : needsAnalysis}
+          {analysis ? (
+            <TailorPanel analysisId={analysis.id} saved={savedTailored} />
+          ) : (
+            needsAnalysis
+          )}
         </CardContent>
       </Card>
 
@@ -205,7 +213,7 @@ async function TailorSection({ jobId }: { jobId: string }) {
         </CardHeader>
         <CardContent>
           {analysis ? (
-            <InterviewPanel analysisId={analysis.id} />
+            <InterviewPanel analysisId={analysis.id} saved={savedInterview} />
           ) : (
             needsAnalysis
           )}

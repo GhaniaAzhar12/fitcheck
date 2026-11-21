@@ -7,6 +7,7 @@ import type { Evidence } from "@/lib/agent/evidence";
 import type { AiChoice } from "@/lib/ai-choice";
 import type { JobExtraction } from "@/lib/job-extraction";
 import { getModel, MODEL_RETRIES } from "@/lib/model";
+import type { SavedInterview } from "@/lib/saved-tailoring";
 import { unverifiedNumbers, verifiedSource } from "@/lib/tailor-check";
 
 const TIMEOUT_MS = 120_000;
@@ -54,12 +55,8 @@ export type InterviewQuestion = {
   unverified: string[];
 };
 
-export type InterviewPrep = {
-  questions: InterviewQuestion[];
-  provider: string;
-  modelId: string;
-  ms: number;
-};
+/** The same shape that is saved on the Analysis. */
+export type InterviewPrep = SavedInterview & { questions: InterviewQuestion[] };
 
 const INSTRUCTIONS = `You prepare a candidate for an interview for one job, using their real CV and the evidence found for each requirement.
 
@@ -135,5 +132,6 @@ export async function generateInterviewPrep({
     provider,
     modelId,
     ms: Date.now() - started,
+    generatedAt: new Date().toISOString(),
   };
 }

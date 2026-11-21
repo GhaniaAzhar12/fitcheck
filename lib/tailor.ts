@@ -7,6 +7,7 @@ import type { Evidence } from "@/lib/agent/evidence";
 import type { AiChoice } from "@/lib/ai-choice";
 import type { JobExtraction } from "@/lib/job-extraction";
 import { getModel, MODEL_RETRIES } from "@/lib/model";
+import type { SavedTailored } from "@/lib/saved-tailoring";
 import { unverifiedNumbers } from "@/lib/tailor-check";
 
 const TIMEOUT_MS = 90_000;
@@ -27,13 +28,8 @@ export const TailoredOutput = z.object({
     .describe("A short cover note, 120 to 180 words, first person"),
 });
 
-export type Tailored = {
-  cvBullets: { text: string; unverified: string[] }[];
-  coverNote: { text: string; unverified: string[] };
-  provider: string;
-  modelId: string;
-  ms: number;
-};
+/** The same shape that is saved on the Analysis. */
+export type Tailored = SavedTailored;
 
 const INSTRUCTIONS = `You tailor a candidate's real CV for one job. Truth matters more than polish.
 
@@ -105,5 +101,6 @@ export async function generateTailored({
     provider,
     modelId,
     ms: Date.now() - started,
+    generatedAt: new Date().toISOString(),
   };
 }

@@ -6,6 +6,8 @@ import { CopyButton } from "@/components/copy-button";
 import { Button } from "@/components/ui/button";
 import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 
+import type { Tailored } from "@/lib/tailor";
+
 import { type TailorState, tailorApplication } from "./tailor-actions";
 
 function Unverified({ numbers }: { numbers: string[] }) {
@@ -18,10 +20,17 @@ function Unverified({ numbers }: { numbers: string[] }) {
   );
 }
 
-export function TailorPanel({ analysisId }: { analysisId: string }) {
+export function TailorPanel({
+  analysisId,
+  saved,
+}: {
+  analysisId: string;
+  /** Previously generated text, so a reload costs no model call. */
+  saved: Tailored | null;
+}) {
   const [state, formAction, pending] = useActionState<TailorState, FormData>(
     tailorApplication,
-    {},
+    saved ? { result: saved } : {},
   );
   // The model choice saved in setup (key stays in this browser).
   const [aiFields, setAiFields] = useState<Record<string, string>>({});
@@ -43,11 +52,7 @@ export function TailorPanel({ analysisId }: { analysisId: string }) {
           variant={result ? "outline" : "default"}
           disabled={pending}
         >
-          {pending
-            ? "Writing…"
-            : result
-              ? "Write again"
-              : "Write tailored text"}
+          {pending ? "Writing…" : result ? "Regenerate" : "Write tailored text"}
         </Button>
         {pending ? (
           <p aria-live="polite" className="text-sm text-muted-foreground">
@@ -108,8 +113,12 @@ export function TailorPanel({ analysisId }: { analysisId: string }) {
 
           <p className="text-xs text-muted-foreground">
             Written only from your CV and the evidence found. {result.provider}/
-            {result.modelId} · {(result.ms / 1000).toFixed(1)}s. Always read
-            before you send.
+            {result.modelId} · {(result.ms / 1000).toFixed(1)}s · saved{" "}
+            {new Date(result.generatedAt).toLocaleString("en-GB", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })}
+            . Always read before you send.
           </p>
         </>
       ) : null}

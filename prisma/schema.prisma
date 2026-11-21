@@ -134,6 +134,10 @@ model Analysis {
   toolCalls    Json?
   /// Written fit report (Day 13)
   report       String?
+  /// Tailored CV bullets + cover note (lib/saved-tailoring.ts)
+  tailored     Json?
+  /// Interview questions and answers (lib/saved-tailoring.ts)
+  interview    Json?
   /// 0–100, weighted from the evidence
   score        Int?
   provider     String

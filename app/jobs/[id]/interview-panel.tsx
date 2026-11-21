@@ -13,12 +13,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 
+import type { InterviewPrep } from "@/lib/interview-prep";
+
 import { type InterviewState, prepareInterview } from "./tailor-actions";
 
-export function InterviewPanel({ analysisId }: { analysisId: string }) {
+export function InterviewPanel({
+  analysisId,
+  saved,
+}: {
+  analysisId: string;
+  /** Previously generated questions, so a reload costs no model call. */
+  saved: InterviewPrep | null;
+}) {
   const [state, formAction, pending] = useActionState<InterviewState, FormData>(
     prepareInterview,
-    {},
+    saved ? { result: saved } : {},
   );
   // The model choice saved in setup (key stays in this browser).
   const [aiFields, setAiFields] = useState<Record<string, string>>({});
@@ -47,7 +56,7 @@ export function InterviewPanel({ analysisId }: { analysisId: string }) {
           {pending
             ? "Preparing…"
             : questions.length
-              ? "New questions"
+              ? "Regenerate"
               : "Prepare interview questions"}
         </Button>
         {pending ? (
@@ -128,6 +137,12 @@ export function InterviewPanel({ analysisId }: { analysisId: string }) {
             loud in your own words. {state.result?.provider}/
             {state.result?.modelId} ·{" "}
             {((state.result?.ms ?? 0) / 1000).toFixed(1)}s
+            {state.result?.generatedAt
+              ? ` · saved ${new Date(state.result.generatedAt).toLocaleString(
+                  "en-GB",
+                  { dateStyle: "medium", timeStyle: "short" },
+                )}`
+              : ""}
           </p>
         </>
       ) : null}
