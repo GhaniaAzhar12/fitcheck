@@ -17,6 +17,8 @@ import { JobExtraction } from "@/lib/job-extraction";
 import { requireSession } from "@/lib/session";
 
 import { AnalysisSection } from "./analysis-section";
+import { JobTabs } from "./job-tabs";
+import { TailorPanel } from "./tailor-panel";
 
 export const metadata: Metadata = { title: "Job · Fitcheck" };
 
@@ -112,36 +114,43 @@ async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
         </CardHeader>
       </Card>
 
-      <AnalysisSection jobId={job.id} />
+      <JobTabs
+        report={
+          <>
+            <AnalysisSection jobId={job.id} />
 
-      <RequirementList title="Must have" items={data.mustHave} />
-      <RequirementList title="Nice to have" items={data.niceToHave} />
+            <RequirementList title="Must have" items={data.mustHave} />
+            <RequirementList title="Nice to have" items={data.niceToHave} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Stack</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {data.stack.length ? (
-            <div className="flex flex-wrap gap-2">
-              {data.stack.map((tech) => (
-                <Badge key={tech} variant="outline">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">None named.</p>
-          )}
-        </CardContent>
-      </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Stack</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {data.stack.length ? (
+                  <div className="flex flex-wrap gap-2">
+                    {data.stack.map((tech) => (
+                      <Badge key={tech} variant="outline">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">None named.</p>
+                )}
+              </CardContent>
+            </Card>
 
-      <details className="rounded-xl border bg-card p-4 text-sm">
-        <summary className="cursor-pointer font-medium">Raw JSON</summary>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-3 text-xs">
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      </details>
+            <details className="rounded-xl border bg-card p-4 text-sm">
+              <summary className="cursor-pointer font-medium">Raw JSON</summary>
+              <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-3 text-xs">
+                {JSON.stringify(data, null, 2)}
+              </pre>
+            </details>
+          </>
+        }
+        tailor={<TailorSection jobId={job.id} />}
+      />
 
       <p className="text-xs text-muted-foreground">
         Saved{" "}
@@ -152,6 +161,37 @@ async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
         · Status: {label(job.status.toLowerCase())}
       </p>
     </div>
+  );
+}
+
+/** Tailoring uses the latest successful analysis for its evidence. */
+async function TailorSection({ jobId }: { jobId: string }) {
+  const analysis = await db.analysis.findFirst({
+    where: { jobId, status: "DONE" },
+    orderBy: { createdAt: "desc" },
+    select: { id: true },
+  });
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Tailor your application</CardTitle>
+        <CardDescription>
+          CV bullets and a cover note for this job, written only from your CV
+          and the evidence Fitcheck found.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {analysis ? (
+          <TailorPanel analysisId={analysis.id} />
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Run <strong>Analyse my fit</strong> on the Report tab first, so the
+            tailored text can use the evidence it finds.
+          </p>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
