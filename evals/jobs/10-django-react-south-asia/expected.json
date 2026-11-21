@@ -57,7 +57,10 @@
     "Jest",
     "AWS",
     "Celery",
-    "Redis"
+    "Redis",
+    "ECS",
+    "RDS",
+    "S3"
   ],
   "mustNotInclude": ["overlap", "bonus"],
   "notes": "'Minimum' vs 'Preferred qualifications' headings; remote limited to South Asia; USD monthly pay. UK-hours overlap is an arrangement."

@@ -1,0 +1,662 @@
+{
+  "ranAt": "2026-11-21T17:13:44.287Z",
+  "provider": "google",
+  "modelId": "gemini-3.1-flash-lite",
+  "weights": {
+    "mustRecall": 30,
+    "stackRecall": 15,
+    "niceRecall": 10,
+    "location": 10,
+    "seniority": 10,
+    "traps": 10,
+    "remote": 5,
+    "years": 5,
+    "salary": 5
+  },
+  "summary": {
+    "overall": 98.4,
+    "metrics": {
+      "mustRecall": 98,
+      "stackRecall": 100,
+      "niceRecall": 100,
+      "location": 100,
+      "seniority": 90,
+      "traps": 100,
+      "remote": 100,
+      "years": 100,
+      "salary": 100
+    },
+    "stackPrecision": 100,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "id": "01-senior-fullstack-remote",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Senior Full-Stack Engineer (TypeScript)",
+        "company": "Ledgerline",
+        "seniority": "senior",
+        "remote": "remote",
+        "location": "Remote (4 hours overlap with CET)",
+        "minYearsExperience": 5,
+        "mustHave": [
+          "Strong TypeScript skills",
+          "Strong React experience",
+          "Strong Next.js experience",
+          "Build REST APIs with Node.js",
+          "PostgreSQL schema design",
+          "PostgreSQL indexing",
+          "PostgreSQL query tuning",
+          "Experience with Stripe",
+          "Write tests with Jest",
+          "Write tests with Playwright",
+          "Clear written English"
+        ],
+        "niceToHave": [
+          "Prisma ORM",
+          "Drizzle ORM",
+          "AWS experience",
+          "B2B SaaS experience",
+          "Integrating LLM APIs"
+        ],
+        "stack": [
+          "TypeScript",
+          "Postgres",
+          "React",
+          "Next.js",
+          "Node.js",
+          "SQL",
+          "Stripe",
+          "Jest",
+          "Playwright",
+          "Prisma",
+          "Drizzle",
+          "AWS",
+          "Lambda",
+          "RDS",
+          "S3"
+        ],
+        "salary": "€70,000 – €90,000 per year"
+      },
+      "error": null,
+      "ms": 4805,
+      "inputTokens": 669,
+      "outputTokens": 334
+    },
+    {
+      "id": "02-frontend-hybrid-london",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Frontend Developer (React)",
+        "company": "Brightpath Learning",
+        "seniority": "mid",
+        "remote": "hybrid",
+        "location": "London, UK",
+        "minYearsExperience": 2,
+        "mustHave": [
+          "2-4 years commercial React experience",
+          "TypeScript skills",
+          "Strong HTML skills",
+          "Strong CSS skills",
+          "Responsive layout experience",
+          "Web accessibility knowledge",
+          "GraphQL API experience",
+          "REST API experience",
+          "Right to work in UK"
+        ],
+        "niceToHave": [
+          "Tailwind CSS",
+          "React Testing Library",
+          "Interest in education or edtech"
+        ],
+        "stack": [
+          "React",
+          "TypeScript",
+          "Figma",
+          "Storybook",
+          "GraphQL",
+          "HTML",
+          "CSS",
+          "REST",
+          "Tailwind CSS",
+          "React Testing Library"
+        ],
+        "salary": null
+      },
+      "error": null,
+      "ms": 1937,
+      "inputTokens": 543,
+      "outputTokens": 245
+    },
+    {
+      "id": "03-ai-engineer-remote-americas",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "AI Product Engineer",
+        "company": "Northwind Health AI",
+        "seniority": "mid",
+        "remote": "remote",
+        "location": "Americas (UTC-3 to UTC-8)",
+        "minYearsExperience": 3,
+        "mustHave": [
+          "3+ years building production web applications",
+          "Strong in TypeScript",
+          "Strong in Python",
+          "Experience shipping features with LLM APIs",
+          "Experience with retrieval-augmented generation",
+          "Experience with embeddings",
+          "Experience with vector search",
+          "Written evals for LLM outputs",
+          "Written automated tests for LLM outputs",
+          "Experience with PostgreSQL",
+          "Comfortable with React"
+        ],
+        "niceToHave": [
+          "Experience with pgvector",
+          "Experience with Vercel AI SDK",
+          "Experience with LangChain",
+          "Experience in healthcare",
+          "Experience in regulated industry",
+          "Familiarity with HIPAA",
+          "Familiarity with Docker",
+          "Familiarity with GCP"
+        ],
+        "stack": [
+          "TypeScript",
+          "Python",
+          "OpenAI",
+          "Anthropic",
+          "Gemini",
+          "PostgreSQL",
+          "pgvector",
+          "React",
+          "Vercel AI SDK",
+          "LangChain",
+          "Docker",
+          "GCP"
+        ],
+        "salary": "$140k–$175k base per year"
+      },
+      "error": null,
+      "ms": 2204,
+      "inputTokens": 595,
+      "outputTokens": 356
+    },
+    {
+      "id": "04-backend-anywhere-but-us",
+      "score": {
+        "score": 94,
+        "metrics": {
+          "mustRecall": 0.8,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": ["us-work-authorization"],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Backend Engineer (Node.js)",
+        "company": "Cartwheel Freight",
+        "seniority": "mid",
+        "remote": "remote",
+        "location": "United States",
+        "minYearsExperience": 3,
+        "mustHave": [
+          "3 years backend services experience",
+          "Strong Node.js skills",
+          "Strong TypeScript skills",
+          "PostgreSQL experience",
+          "Query optimisation experience",
+          "Message queues experience"
+        ],
+        "niceToHave": [
+          "Kubernetes experience",
+          "Logistics background",
+          "E-commerce background"
+        ],
+        "stack": [
+          "Node.js",
+          "TypeScript",
+          "PostgreSQL",
+          "Redis",
+          "OpenTelemetry",
+          "Grafana",
+          "Kafka",
+          "RabbitMQ",
+          "SQS",
+          "Kubernetes"
+        ],
+        "salary": "$120,000 – $145,000 a year"
+      },
+      "error": null,
+      "ms": 6299,
+      "inputTokens": 498,
+      "outputTokens": 243
+    },
+    {
+      "id": "05-application-traps",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Full-Stack Developer (React + Node)",
+        "company": "Brightwave Studio",
+        "seniority": "mid",
+        "remote": "remote",
+        "location": "Europe or Asia (UTC to UTC+6)",
+        "minYearsExperience": 3,
+        "mustHave": [
+          "3 years full-stack experience",
+          "React experience",
+          "Node.js experience",
+          "Solid TypeScript",
+          "Design REST APIs",
+          "Consume REST APIs",
+          "MongoDB or PostgreSQL experience",
+          "Written English proficiency"
+        ],
+        "niceToHave": [
+          "Next.js",
+          "Docker experience",
+          "Shipped product to customers"
+        ],
+        "stack": [
+          "React",
+          "Node.js",
+          "TypeScript",
+          "REST API",
+          "MongoDB",
+          "PostgreSQL",
+          "Next.js",
+          "Docker"
+        ],
+        "salary": "€3,000 – €4,200 per month"
+      },
+      "error": null,
+      "ms": 2188,
+      "inputTokens": 542,
+      "outputTokens": 250
+    },
+    {
+      "id": "06-junior-react-lahore",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Junior React Developer",
+        "company": "Indus Apps",
+        "seniority": "junior",
+        "remote": "onsite",
+        "location": "Lahore, Pakistan",
+        "minYearsExperience": 0,
+        "mustHave": [
+          "Bachelor's degree in Computer Science",
+          "Understanding of JavaScript ES6+",
+          "Understanding of HTML",
+          "Understanding of CSS",
+          "Basic knowledge of React",
+          "Basic knowledge of Git"
+        ],
+        "niceToHave": [
+          "Familiarity with TypeScript",
+          "Experience with Tailwind CSS",
+          "Portfolio or GitHub projects"
+        ],
+        "stack": [
+          "React",
+          "JavaScript",
+          "HTML",
+          "CSS",
+          "Git",
+          "TypeScript",
+          "Tailwind CSS",
+          "Figma"
+        ],
+        "salary": "PKR 80,000 – 120,000 per month"
+      },
+      "error": null,
+      "ms": 7972,
+      "inputTokens": 480,
+      "outputTokens": 238
+    },
+    {
+      "id": "07-staff-platform-prose",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Staff Platform Engineer",
+        "company": "Northlake Data",
+        "seniority": "lead",
+        "remote": "remote",
+        "location": "EU",
+        "minYearsExperience": 8,
+        "mustHave": [
+          "Fluent in Go",
+          "Experience with Terraform",
+          "Experience running Kubernetes in production",
+          "Experience leading technical decisions"
+        ],
+        "niceToHave": [
+          "Experience with Istio",
+          "Contributed to open-source projects",
+          "Experience with Python"
+        ],
+        "stack": [
+          "Kubernetes",
+          "Google Cloud",
+          "Go",
+          "Terraform",
+          "Istio",
+          "Python"
+        ],
+        "salary": "€110,000 – €135,000"
+      },
+      "error": null,
+      "ms": 2095,
+      "inputTokens": 528,
+      "outputTokens": 203
+    },
+    {
+      "id": "08-freelance-react-native",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Freelance React Native Developer",
+        "company": "Pocketfit",
+        "seniority": "mid",
+        "remote": "remote",
+        "location": "Worldwide",
+        "minYearsExperience": 2,
+        "mustHave": [
+          "2 years building mobile apps",
+          "React Native experience",
+          "Experience with Expo",
+          "TypeScript proficiency",
+          "Publishing to App Store",
+          "Publishing to Google Play",
+          "Firebase Auth experience",
+          "Firebase Firestore experience"
+        ],
+        "niceToHave": [
+          "In-app purchases experience",
+          "RevenueCat experience",
+          "Health app background",
+          "Fitness app background"
+        ],
+        "stack": [
+          "React Native",
+          "Expo",
+          "TypeScript",
+          "Firebase",
+          "RevenueCat"
+        ],
+        "salary": "$40 – $60 per hour"
+      },
+      "error": null,
+      "ms": 7935,
+      "inputTokens": 449,
+      "outputTokens": 222
+    },
+    {
+      "id": "09-marketing-heavy",
+      "score": {
+        "score": 90,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 0,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Software Engineer",
+        "company": "Lumen Pay",
+        "seniority": "unknown",
+        "remote": "hybrid",
+        "location": "Berlin",
+        "minYearsExperience": 2,
+        "mustHave": [
+          "Ruby on Rails experience",
+          "React experience",
+          "SQL understanding"
+        ],
+        "niceToHave": ["Stripe experience", "Payments API experience"],
+        "stack": ["Ruby on Rails", "React", "SQL", "Stripe"],
+        "salary": null
+      },
+      "error": null,
+      "ms": 4333,
+      "inputTokens": 533,
+      "outputTokens": 150
+    },
+    {
+      "id": "10-django-react-south-asia",
+      "score": {
+        "score": 100,
+        "metrics": {
+          "mustRecall": 1,
+          "niceRecall": 1,
+          "stackRecall": 1,
+          "seniority": 1,
+          "remote": 1,
+          "location": 1,
+          "years": 1,
+          "salary": 1,
+          "traps": 1
+        },
+        "missedMust": [],
+        "missedNice": [],
+        "misplaced": [],
+        "missedStack": [],
+        "extraStack": [],
+        "stackPrecision": 1,
+        "trapsHit": []
+      },
+      "output": {
+        "title": "Full-Stack Engineer (Django + React)",
+        "company": "Tabula Health",
+        "seniority": "mid",
+        "remote": "remote",
+        "location": "Pakistan, India, Bangladesh",
+        "minYearsExperience": 4,
+        "mustHave": [
+          "4 years software development experience",
+          "Strong Python skills",
+          "Strong Django skills",
+          "Django REST Framework experience",
+          "Strong React skills",
+          "TypeScript experience",
+          "Solid PostgreSQL skills",
+          "Data modelling skills",
+          "Automated testing experience"
+        ],
+        "niceToHave": [
+          "AWS experience",
+          "Celery experience",
+          "Redis experience",
+          "Healthcare industry experience",
+          "Regulated industry experience"
+        ],
+        "stack": [
+          "Django",
+          "React",
+          "Python",
+          "Django REST Framework",
+          "TypeScript",
+          "PostgreSQL",
+          "pytest",
+          "Jest",
+          "AWS",
+          "ECS",
+          "RDS",
+          "S3",
+          "Celery",
+          "Redis"
+        ],
+        "salary": "USD 2,500 – 3,500 per month"
+      },
+      "error": null,
+      "ms": 1445,
+      "inputTokens": 457,
+      "outputTokens": 295
+    }
+  ]
+}

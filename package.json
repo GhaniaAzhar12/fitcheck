@@ -16,7 +16,8 @@
     "db:studio": "prisma studio",
     "extract:try": "bun --conditions=react-server scripts/try-extract.ts",
     "evidence:try": "bun --conditions=react-server scripts/try-evidence.ts",
-    "pipeline:try": "bun --conditions=react-server scripts/try-pipeline.ts"
+    "pipeline:try": "bun --conditions=react-server scripts/try-pipeline.ts",
+    "eval:extract": "bun --conditions=react-server scripts/eval-extract.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.106",

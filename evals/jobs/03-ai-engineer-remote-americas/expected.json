@@ -63,7 +63,10 @@
     "Vercel AI SDK",
     "LangChain",
     "Docker",
-    "GCP"
+    "GCP",
+    "OpenAI",
+    "Anthropic",
+    "Gemini"
   ],
   "mustNotInclude": ["cover letter", "equity"],
   "notes": "'pgvector is a plus' sits inside the must list and must be nice-to-have. Remote limited to the Americas."

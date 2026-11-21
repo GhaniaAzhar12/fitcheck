@@ -35,6 +35,22 @@ evals/jobs/<NN-name>/
 - **locationAnyOf** passes if the extracted location contains any of the words; `null` means the post states no location.
 - **stack** uses each technology's usual spelling.
 
+## Running the eval
+
+```bash
+bun run eval:extract --provider google        # free Gemini (what the live app uses)
+bun run eval:extract --provider ollama        # local model, free and unlimited
+bun run eval:extract --case 04                # one case
+```
+
+Each case scores 0–100 from weighted checks: must-have recall 30, stack recall 15, nice-to-have recall 10, location 10, seniority 10, no traps 10, remote type 5, years 5, salary stated 5. The script prints a table and the misses, and saves the full run (scores, model outputs, model) to `evals/results/<date>-<provider>-<model>.json`.
+
+## Results
+
+| Date | Model | Overall | Notes |
+|---|---|---|---|
+| 21 Nov 2026 | gemini-3.1-flash-lite | **98.4** | Misses: US work authorisation dropped by the "time zone" filter (case 04); seniority "unknown" for a 2+ years role (case 09) |
+
 ## Checking the labels
 
 `bun run test` includes `lib/evals/cases.test.ts`, which fails if any label isn't grounded in its post: every concept must match the post, and every stack item, location word and trap must appear in it.

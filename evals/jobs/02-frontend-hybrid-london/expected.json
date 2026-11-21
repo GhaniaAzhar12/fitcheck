@@ -59,7 +59,8 @@
     "Storybook",
     "Figma",
     "Tailwind CSS",
-    "React Testing Library"
+    "React Testing Library",
+    "REST"
   ],
   "mustNotInclude": ["cycle-to-work", "health insurance", "team lunches"],
   "notes": "Hybrid with a right-to-work rule (matters for the verdict). No salary stated."

@@ -53,7 +53,8 @@
     "MongoDB",
     "PostgreSQL",
     "Next.js",
-    "Docker"
+    "Docker",
+    "REST"
   ],
   "mustNotInclude": [
     "blue whale",

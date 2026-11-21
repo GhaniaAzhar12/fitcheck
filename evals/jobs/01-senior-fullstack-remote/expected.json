@@ -69,7 +69,11 @@
     "Playwright",
     "Prisma",
     "Drizzle",
-    "AWS"
+    "AWS",
+    "SQL",
+    "Lambda",
+    "RDS",
+    "S3"
   ],
   "mustNotInclude": ["overlap", "learning budget", "30 days"],
   "notes": "Baseline remote senior role. Time-zone overlap and benefits must not become requirements."
