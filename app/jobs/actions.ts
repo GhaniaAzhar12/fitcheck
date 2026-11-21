@@ -1,10 +1,11 @@
 "use server";
 
-import { APICallError, NoObjectGeneratedError } from "ai";
+import { NoObjectGeneratedError } from "ai";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { aiChoiceFrom } from "@/lib/ai-choice";
+import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
 import { db } from "@/lib/db";
 import { extractJob, JobTextError } from "@/lib/extract-job";
 import { fetchJobPage, JobPageError } from "@/lib/fetch-job-page";
@@ -64,12 +65,7 @@ export async function createJob(
     });
     jobId = job.id;
   } catch (error) {
-    // Log a summary only: full errors can echo request details.
-    console.error("[createJob]", {
-      name: error instanceof Error ? error.name : typeof error,
-      status: APICallError.isInstance(error) ? error.statusCode : undefined,
-      message: error instanceof Error ? error.message.slice(0, 300) : undefined,
-    });
+    console.error("[createJob]", errorSummary(error));
     return { ...raw, error: friendlyError(error) };
   }
 
@@ -81,25 +77,11 @@ function friendlyError(error: unknown): string {
   if (error instanceof JobPageError || error instanceof JobTextError) {
     return error.message;
   }
-  if (
-    error instanceof Error &&
-    (error.name === "TimeoutError" || error.name === "AbortError")
-  ) {
-    return "The AI model took too long to answer. Try again in a moment.";
-  }
-  if (APICallError.isInstance(error)) {
-    if (error.statusCode === 429) {
-      return "The free AI quota is used up for now. Try again in a minute.";
-    }
-    if (error.statusCode && error.statusCode >= 500) {
-      return "The AI model is busy right now. Try again in a moment.";
-    }
-    if (error.statusCode === 401 || error.statusCode === 403) {
-      return "The AI key was rejected. If you use your own key, check it in Set up → AI model.";
-    }
-  }
   if (NoObjectGeneratedError.isInstance(error)) {
     return "The AI couldn't make sense of that text. Check it's a full job post and try again.";
   }
-  return "Something went wrong reading that job. Try again, or paste the text instead.";
+  return (
+    aiErrorMessage(error) ??
+    "Something went wrong reading that job. Try again, or paste the text instead."
+  );
 }

@@ -16,7 +16,13 @@ import { db } from "@/lib/db";
 import { JobExtraction } from "@/lib/job-extraction";
 import { requireSession } from "@/lib/session";
 
+import { AnalysisSection } from "./analysis-section";
+
 export const metadata: Metadata = { title: "Job · Fitcheck" };
+
+// The analyzeJob server action runs on this page: the agent's research
+// (up to 120 s) plus the judge (up to 90 s) on a slow free-tier model.
+export const maxDuration = 300;
 
 export default function JobPage({ params }: PageProps<"/jobs/[id]">) {
   return (
@@ -105,6 +111,8 @@ async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
           ) : null}
         </CardHeader>
       </Card>
+
+      <AnalysisSection jobId={job.id} />
 
       <RequirementList title="Must have" items={data.mustHave} />
       <RequirementList title="Nice to have" items={data.niceToHave} />
