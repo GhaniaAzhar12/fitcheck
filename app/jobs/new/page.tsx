@@ -8,6 +8,10 @@ import { NewJobForm } from "./new-job-form";
 
 export const metadata: Metadata = { title: "New job · Fitcheck" };
 
+// The createJob server action runs on this page. Fetching the page (15 s)
+// plus a slow free-tier model call (90 s) needs more than Vercel's default.
+export const maxDuration = 120;
+
 export default function NewJobPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-12">
