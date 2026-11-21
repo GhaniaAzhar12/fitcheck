@@ -7,6 +7,8 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { streamFitReport } from "@/lib/fit-report";
 import { JobExtraction } from "@/lib/job-extraction";
+import { getModel } from "@/lib/model";
+import { recordUsage } from "@/lib/usage";
 
 // Streaming a report on a slow free-tier model can take a while.
 export const maxDuration = 120;
@@ -34,6 +36,7 @@ export async function POST(
       id: true,
       evidence: true,
       score: true,
+      jobId: true,
       job: { select: { extracted: true } },
     },
   });
@@ -55,17 +58,28 @@ export async function POST(
     formData = new FormData();
   }
 
+  const aiChoice = aiChoiceFrom(formData);
+  const { provider, modelId } = getModel(aiChoice);
   try {
     const result = streamFitReport({
       job: job.data,
       evidence: (analysis.evidence ?? []) as Evidence[],
       score: analysis.score,
       cvText: profile?.cvText ?? "",
-      aiChoice: aiChoiceFrom(formData),
-      onDone: async (text) => {
+      aiChoice,
+      onDone: async (text, usage) => {
         await db.analysis.update({
           where: { id: analysis.id },
           data: { report: text },
+        });
+        await recordUsage({
+          userId: session.user.id,
+          jobId: analysis.jobId,
+          kind: "REPORT",
+          provider,
+          model: modelId,
+          aiChoice,
+          ...usage,
         });
       },
     });

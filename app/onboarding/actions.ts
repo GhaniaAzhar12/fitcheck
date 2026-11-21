@@ -11,6 +11,7 @@ import { GitHubError, listPublicRepos } from "@/lib/github";
 import { getModel } from "@/lib/model";
 import { MAX_REPOS, MIN_REPOS, minReposFor } from "@/lib/onboarding";
 import { getSession } from "@/lib/session";
+import { recordUsage } from "@/lib/usage";
 
 export type UploadCvState = { error?: string; saved?: boolean };
 
@@ -59,13 +60,24 @@ export async function checkApiKey(
   const choice = aiChoiceFrom(formData);
   if (!choice?.apiKey) return { error: "Paste a valid API key first." };
 
+  const started = Date.now();
+  const { provider, model, modelId } = getModel(choice);
   try {
-    const { model } = getModel(choice);
-    await generateText({
+    const { usage } = await generateText({
       model,
       prompt: "Reply with the word OK.",
       maxOutputTokens: 5,
       abortSignal: AbortSignal.timeout(30_000),
+    });
+    await recordUsage({
+      userId: session.user.id,
+      kind: "KEY_CHECK",
+      provider,
+      model: modelId,
+      aiChoice: choice,
+      inputTokens: usage.inputTokens ?? 0,
+      outputTokens: usage.outputTokens ?? 0,
+      ms: Date.now() - started,
     });
     return { ok: true };
   } catch (error) {

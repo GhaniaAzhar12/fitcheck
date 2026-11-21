@@ -20,6 +20,7 @@ import { requireSession } from "@/lib/session";
 
 import { AnalysisSection } from "./analysis-section";
 import { InterviewPanel } from "./interview-panel";
+import { JobCost } from "./job-cost";
 import { JobTabs } from "./job-tabs";
 import { TailorPanel } from "./tailor-panel";
 
@@ -158,6 +159,8 @@ async function JobDetails({
                 )}
               </CardContent>
             </Card>
+
+            <JobCost jobId={job.id} />
 
             <details className="rounded-xl border bg-card p-4 text-sm">
               <summary className="cursor-pointer font-medium">Raw JSON</summary>

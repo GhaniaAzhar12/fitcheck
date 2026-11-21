@@ -23,6 +23,7 @@ const NAV: { href: string; label: string; wideOnly?: boolean }[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/jobs/new", label: "New job" },
   // Reachable from the dashboard too, so hidden on narrow phones.
+  { href: "/usage", label: "Usage", wideOnly: true },
   { href: "/onboarding?step=1", label: "Set up", wideOnly: true },
 ];
 

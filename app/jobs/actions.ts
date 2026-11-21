@@ -10,7 +10,9 @@ import { db } from "@/lib/db";
 import { extractJob, JobTextError } from "@/lib/extract-job";
 import { fetchJobPage, JobPageError } from "@/lib/fetch-job-page";
 import { normalizeJobUrl } from "@/lib/job-url";
+import { getModel } from "@/lib/model";
 import { getSession } from "@/lib/session";
+import { recordUsage } from "@/lib/usage";
 
 export type CreateJobState = {
   error?: string;
@@ -53,11 +55,13 @@ export async function createJob(
   if (existingId) redirect(`/jobs/${existingId}?existing=1`);
 
   let jobId: string;
+  // The visitor's own key (if any) is used for this call only.
+  const aiChoice = aiChoiceFrom(formData);
+  const started = Date.now();
   try {
     // Pasted text wins: it's what the user actually sees.
     const rawText = text || (await fetchJobPage(url));
-    // The visitor's own key (if any) is used for this call only.
-    const result = await extractJob(rawText, aiChoiceFrom(formData));
+    const result = await extractJob(rawText, aiChoice);
 
     const job = await db.job.create({
       data: {
@@ -69,8 +73,32 @@ export async function createJob(
       select: { id: true },
     });
     jobId = job.id;
+    await recordUsage({
+      userId: session.user.id,
+      jobId,
+      kind: "EXTRACT",
+      provider: result.provider,
+      model: result.modelId,
+      aiChoice,
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ms: result.ms,
+    });
   } catch (error) {
     console.error("[createJob]", errorSummary(error));
+    // Page and text problems never reached the model; model failures did.
+    if (!(error instanceof JobPageError || error instanceof JobTextError)) {
+      const { provider, modelId } = getModel(aiChoice);
+      await recordUsage({
+        userId: session.user.id,
+        kind: "EXTRACT",
+        provider,
+        model: modelId,
+        aiChoice,
+        ok: false,
+        ms: Date.now() - started,
+      });
+    }
     return { ...raw, error: friendlyError(error) };
   }
 

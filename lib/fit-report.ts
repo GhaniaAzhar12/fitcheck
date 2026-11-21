@@ -73,9 +73,13 @@ export function streamFitReport(options: {
   score: number | null;
   cvText: string;
   aiChoice?: AiChoice;
-  onDone: (text: string) => Promise<void>;
+  onDone: (
+    text: string,
+    usage: { inputTokens: number; outputTokens: number; ms: number },
+  ) => Promise<void>;
 }) {
   const { model } = getModel(options.aiChoice);
+  const started = Date.now();
   return streamText({
     model,
     instructions: REPORT_INSTRUCTIONS,
@@ -83,8 +87,13 @@ export function streamFitReport(options: {
     temperature: 0.2,
     maxRetries: MODEL_RETRIES,
     abortSignal: AbortSignal.timeout(TIMEOUT_MS),
-    onEnd: async ({ text }) => {
-      if (text.trim()) await options.onDone(text.trim());
+    onEnd: async ({ text, totalUsage }) => {
+      if (!text.trim()) return;
+      await options.onDone(text.trim(), {
+        inputTokens: totalUsage.inputTokens ?? 0,
+        outputTokens: totalUsage.outputTokens ?? 0,
+        ms: Date.now() - started,
+      });
     },
   });
 }

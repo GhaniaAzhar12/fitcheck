@@ -11,6 +11,12 @@ import { GitHubError, githubFor } from "@/lib/github";
 import { JobExtraction } from "@/lib/job-extraction";
 import { getModel } from "@/lib/model";
 import { isOnboarded } from "@/lib/onboarding";
+import {
+  FREE_ANALYSES_PER_DAY,
+  freeAnalysesToday,
+  recordUsage,
+  usesOwnResources,
+} from "@/lib/usage";
 
 /** A message that is safe to show the user as-is. */
 export class AnalysisError extends Error {}
@@ -54,6 +60,16 @@ export async function runAnalysis({
     );
   }
 
+  // Protect the shared free tier: own keys and local models are unlimited.
+  if (!usesOwnResources(aiChoice)) {
+    const used = await freeAnalysesToday(userId);
+    if (used >= FREE_ANALYSES_PER_DAY) {
+      throw new AnalysisError(
+        `You've used today's ${FREE_ANALYSES_PER_DAY} free analyses. Add your own API key in Set up to keep going, or try again tomorrow.`,
+      );
+    }
+  }
+
   const { provider, modelId } = getModel(aiChoice);
   const started = Date.now();
 
@@ -89,6 +105,17 @@ export async function runAnalysis({
       },
       select: { id: true },
     });
+    await recordUsage({
+      userId,
+      jobId: job.id,
+      kind: "ANALYSIS",
+      provider: result.provider,
+      model: result.modelId,
+      aiChoice,
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ms: result.ms,
+    });
     return { analysisId: analysis.id, score };
   } catch (error) {
     const message =
@@ -105,6 +132,16 @@ export async function runAnalysis({
         ms: Date.now() - started,
         error: message,
       },
+    });
+    await recordUsage({
+      userId,
+      jobId: job.id,
+      kind: "ANALYSIS",
+      provider,
+      model: modelId,
+      aiChoice,
+      ok: false,
+      ms: Date.now() - started,
     });
     throw new AnalysisError(message);
   }

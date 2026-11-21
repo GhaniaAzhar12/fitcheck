@@ -100,7 +100,7 @@ export async function generateInterviewPrep({
   const started = Date.now();
   const notes = evidenceNotes(evidence);
 
-  const { output } = await generateText({
+  const { output, usage } = await generateText({
     model,
     instructions: INSTRUCTIONS,
     prompt: [
@@ -133,5 +133,7 @@ export async function generateInterviewPrep({
     modelId,
     ms: Date.now() - started,
     generatedAt: new Date().toISOString(),
+    inputTokens: usage.inputTokens ?? 0,
+    outputTokens: usage.outputTokens ?? 0,
   };
 }

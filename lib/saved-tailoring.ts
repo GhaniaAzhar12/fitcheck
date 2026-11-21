@@ -11,6 +11,8 @@ const Meta = {
   modelId: z.string(),
   ms: z.number(),
   generatedAt: z.string(),
+  inputTokens: z.number().optional(),
+  outputTokens: z.number().optional(),
 };
 
 export const SavedTailored = z.object({

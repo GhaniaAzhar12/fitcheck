@@ -12,6 +12,7 @@ import {
 import { JobExtraction } from "@/lib/job-extraction";
 import { getSession } from "@/lib/session";
 import { generateTailored, type Tailored } from "@/lib/tailor";
+import { recordUsage } from "@/lib/usage";
 
 export type TailorState = { error?: string; result?: Tailored };
 
@@ -26,7 +27,11 @@ export async function tailorApplication(
   // Only analyses of the signed-in user's own jobs.
   const analysis = await db.analysis.findFirst({
     where: { id: analysisId, status: "DONE", job: { userId: session.user.id } },
-    select: { evidence: true, job: { select: { extracted: true } } },
+    select: {
+      evidence: true,
+      jobId: true,
+      job: { select: { extracted: true } },
+    },
   });
   if (!analysis) return { error: "Run the fit analysis first." };
 
@@ -52,6 +57,17 @@ export async function tailorApplication(
       where: { id: analysisId },
       data: { tailored: result as unknown as Prisma.InputJsonValue },
     });
+    await recordUsage({
+      userId: session.user.id,
+      jobId: analysis.jobId,
+      kind: "TAILOR",
+      provider: result.provider,
+      model: result.modelId,
+      aiChoice: aiChoiceFrom(formData),
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ms: result.ms,
+    });
     return { result };
   } catch (error) {
     console.error("[tailor]", errorSummary(error));
@@ -75,7 +91,11 @@ export async function prepareInterview(
   // Only analyses of the signed-in user's own jobs.
   const analysis = await db.analysis.findFirst({
     where: { id: analysisId, status: "DONE", job: { userId: session.user.id } },
-    select: { evidence: true, job: { select: { extracted: true } } },
+    select: {
+      evidence: true,
+      jobId: true,
+      job: { select: { extracted: true } },
+    },
   });
   if (!analysis) return { error: "Run the fit analysis first." };
 
@@ -102,6 +122,17 @@ export async function prepareInterview(
     await db.analysis.update({
       where: { id: analysisId },
       data: { interview: result as unknown as Prisma.InputJsonValue },
+    });
+    await recordUsage({
+      userId: session.user.id,
+      jobId: analysis.jobId,
+      kind: "INTERVIEW",
+      provider: result.provider,
+      model: result.modelId,
+      aiChoice: aiChoiceFrom(formData),
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ms: result.ms,
     });
     return { result };
   } catch (error) {

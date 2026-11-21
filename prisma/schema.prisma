@@ -11,17 +11,18 @@ datasource db {
 // ─── Better Auth tables (core schema) ────────────────────────────────────────
 
 model User {
-  id            String    @id
+  id            String       @id
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
+  email         String       @unique
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   sessions      Session[]
   accounts      Account[]
   jobs          Job[]
   profile       Profile?
+  usageEvents   UsageEvent[]
 
   @@map("user")
 }
@@ -101,19 +102,20 @@ enum JobStatus {
 }
 
 model Job {
-  id         String     @id @default(cuid())
-  userId     String
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  url        String?
-  rawText    String
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url         String?
+  rawText     String
   /// Structured requirements pulled out by the model (JobExtraction schema)
-  extracted  Json?
-  status     JobStatus  @default(SAVED)
+  extracted   Json?
+  status      JobStatus    @default(SAVED)
   /// When to chase this application next (tracker)
-  followUpAt DateTime?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  analyses   Analysis[]
+  followUpAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  analyses    Analysis[]
+  usageEvents UsageEvent[]
 
   @@index([userId, createdAt])
   @@map("job")
@@ -153,4 +155,38 @@ model Analysis {
 
   @@index([jobId, createdAt])
   @@map("analysis")
+}
+
+enum UsageKind {
+  EXTRACT
+  ANALYSIS
+  REPORT
+  TAILOR
+  INTERVIEW
+  KEY_CHECK
+}
+
+/// One AI model call: what it cost in tokens and time. Powers the cost
+/// panel, /usage and the daily free-analysis limit.
+model UsageEvent {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Null for calls not tied to a saved job (e.g. a key check).
+  jobId        String?
+  job          Job?      @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  kind         UsageKind
+  provider     String
+  model        String
+  /// True when the visitor's own API key paid for the call.
+  ownKey       Boolean   @default(false)
+  ok           Boolean   @default(true)
+  inputTokens  Int       @default(0)
+  outputTokens Int       @default(0)
+  ms           Int       @default(0)
+  createdAt    DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([jobId])
+  @@map("usage_event")
 }
