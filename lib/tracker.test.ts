@@ -1,6 +1,16 @@
 import { describe, expect, test } from "bun:test";
 
-import { scoreBand, statusLabel, toTrackerRow } from "./tracker";
+import {
+  dateToFollowUp,
+  filterRows,
+  followUpToDate,
+  isOverdue,
+  scoreBand,
+  sortRows,
+  statusCounts,
+  statusLabel,
+  toTrackerRow,
+} from "./tracker";
 
 const extracted = {
   title: "Frontend Engineer",
@@ -76,5 +86,65 @@ describe("scoreBand / statusLabel", () => {
 
   test("labels statuses in sentence case", () => {
     expect(statusLabel("INTERVIEW")).toBe("Interview");
+  });
+});
+
+describe("interactive tracker helpers", () => {
+  const row = (id: string, over: Partial<import("./tracker").ClientRow>) => ({
+    id,
+    company: null,
+    role: id,
+    score: null,
+    status: "SAVED" as const,
+    followUp: null,
+    updatedAt: "2026-11-20T10:00:00.000Z",
+    ...over,
+  });
+  const rows = [
+    row("a", {
+      score: 40,
+      status: "APPLIED",
+      followUp: "2026-11-25",
+      updatedAt: "2026-11-21T09:00:00.000Z",
+    }),
+    row("b", { score: 80, followUp: "2026-11-19" }),
+    row("c", { status: "APPLIED", updatedAt: "2026-11-22T09:00:00.000Z" }),
+  ];
+
+  test("follow-up days survive the round trip in any time zone", () => {
+    const d = followUpToDate("2026-11-25");
+    expect(d.toISOString()).toBe("2026-11-25T12:00:00.000Z");
+    expect(dateToFollowUp(d)).toBe("2026-11-25");
+    expect(dateToFollowUp(null)).toBeNull();
+  });
+
+  test("overdue means strictly before today", () => {
+    expect(isOverdue("2026-11-20", "2026-11-21")).toBe(true);
+    expect(isOverdue("2026-11-21", "2026-11-21")).toBe(false);
+    expect(isOverdue(null, "2026-11-21")).toBe(false);
+  });
+
+  test("filters by status", () => {
+    expect(filterRows(rows, "APPLIED").map((r) => r.id)).toEqual(["a", "c"]);
+    expect(filterRows(rows, "ALL")).toHaveLength(3);
+  });
+
+  test("sorts by score, follow-up and recency with blanks last", () => {
+    expect(sortRows(rows, "score").map((r) => r.id)).toEqual(["b", "a", "c"]);
+    expect(sortRows(rows, "followUp").map((r) => r.id)).toEqual([
+      "b",
+      "a",
+      "c",
+    ]);
+    expect(sortRows(rows, "updated").map((r) => r.id)).toEqual(["c", "a", "b"]);
+  });
+
+  test("counts jobs per status", () => {
+    expect(statusCounts(rows)).toMatchObject({
+      ALL: 3,
+      SAVED: 1,
+      APPLIED: 2,
+      OFFER: 0,
+    });
   });
 });
