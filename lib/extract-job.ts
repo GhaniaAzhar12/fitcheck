@@ -21,6 +21,9 @@ Rules:
 - Ignore company marketing, benefits and application instructions.
 - If something is not stated, use null (or "unknown" for seniority and remote).`;
 
+/** A message that is safe to show the user as-is. */
+export class JobTextError extends Error {}
+
 export type ExtractJobResult = {
   data: JobExtraction;
   provider: string;
@@ -34,7 +37,9 @@ export type ExtractJobResult = {
 export async function extractJob(rawText: string): Promise<ExtractJobResult> {
   const text = rawText.trim();
   if (text.length < 50) {
-    throw new Error("That's too short to be a job post. Paste the full text.");
+    throw new JobTextError(
+      "That's too short to be a job post. Paste the full text.",
+    );
   }
   const truncated = text.length > MAX_CHARS;
 
