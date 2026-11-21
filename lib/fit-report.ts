@@ -5,7 +5,7 @@ import { streamText } from "ai";
 import type { Evidence } from "@/lib/agent/evidence";
 import type { AiChoice } from "@/lib/ai-choice";
 import type { JobExtraction } from "@/lib/job-extraction";
-import { getModel } from "@/lib/model";
+import { getModel, MODEL_RETRIES } from "@/lib/model";
 
 const TIMEOUT_MS = 90_000;
 /** The top of the CV usually holds location, years and a summary. */
@@ -81,6 +81,7 @@ export function streamFitReport(options: {
     instructions: REPORT_INSTRUCTIONS,
     prompt: buildReportPrompt(options),
     temperature: 0.2,
+    maxRetries: MODEL_RETRIES,
     abortSignal: AbortSignal.timeout(TIMEOUT_MS),
     onEnd: async ({ text }) => {
       if (text.trim()) await options.onDone(text.trim());

@@ -15,6 +15,13 @@ export const DEFAULT_MODELS: Record<Provider, string> = {
   anthropic: "claude-haiku-5-5", // paid, cheapest Claude
 };
 
+/**
+ * Retries per model call (SDK default is 2). Free tiers limit requests per
+ * minute; with exponential backoff (~2, 4, 8, 16 s) 4 retries give the
+ * limit time to reset instead of failing the whole run.
+ */
+export const MODEL_RETRIES = 4;
+
 export type ModelChoice = {
   provider: Provider;
   modelId: string;

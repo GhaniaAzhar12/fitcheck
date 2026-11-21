@@ -7,7 +7,7 @@ import {
 } from "ai";
 
 import type { JobExtraction } from "@/lib/job-extraction";
-import { getModel } from "@/lib/model";
+import { getModel, MODEL_RETRIES } from "@/lib/model";
 
 import { chunkCv } from "./cv-search";
 import {
@@ -300,6 +300,7 @@ export async function findEvidence(options: {
     tools,
     stopWhen: [stepCountIs(MAX_STEPS), githubCallsAtLeast(MAX_GITHUB_CALLS)],
     temperature: 0,
+    maxRetries: MODEL_RETRIES,
     abortSignal: AbortSignal.timeout(RESEARCH_TIMEOUT_MS),
   });
 
@@ -336,6 +337,7 @@ export async function findEvidence(options: {
     prompt: `Requirements:\n${reqText}\n\nResearch notes:\n${notesFrom(research.steps, research.text)}`,
     output: Output.object({ schema: JudgedEvidenceList, name: "evidence" }),
     temperature: 0,
+    maxRetries: MODEL_RETRIES,
     abortSignal: AbortSignal.timeout(JUDGE_TIMEOUT_MS),
   });
 

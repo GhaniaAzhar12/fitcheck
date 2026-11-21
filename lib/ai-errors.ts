@@ -1,10 +1,17 @@
-import { APICallError, NoObjectGeneratedError } from "ai";
+import { APICallError, NoObjectGeneratedError, RetryError } from "ai";
 
 /**
  * A plain-English message for an AI model failure, or null if the error
  * isn't one. Shared by job extraction and fit analysis.
  */
 export function aiErrorMessage(error: unknown): string | null {
+  // After its retries, the SDK wraps the real error (e.g. a 429) in a RetryError.
+  if (RetryError.isInstance(error)) {
+    return (
+      aiErrorMessage(error.lastError) ??
+      "The AI model kept failing. Try again in a minute."
+    );
+  }
   if (
     error instanceof Error &&
     (error.name === "TimeoutError" || error.name === "AbortError")
@@ -30,9 +37,10 @@ export function aiErrorMessage(error: unknown): string | null {
 
 /** A short, safe summary for server logs (full errors can echo request details). */
 export function errorSummary(error: unknown) {
+  const inner = RetryError.isInstance(error) ? error.lastError : error;
   return {
     name: error instanceof Error ? error.name : typeof error,
-    status: APICallError.isInstance(error) ? error.statusCode : undefined,
+    status: APICallError.isInstance(inner) ? inner.statusCode : undefined,
     message: error instanceof Error ? error.message.slice(0, 300) : undefined,
   };
 }

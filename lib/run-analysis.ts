@@ -1,7 +1,7 @@
 import "server-only";
 
 import { findEvidence } from "@/lib/agent/find-evidence";
-import { octokitRepoApi } from "@/lib/agent/repo-files";
+import { octokitRepoApi, type RepoApi } from "@/lib/agent/repo-files";
 import { fitScore } from "@/lib/agent/score";
 import type { AiChoice } from "@/lib/ai-choice";
 import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
@@ -23,10 +23,13 @@ export async function runAnalysis({
   userId,
   jobId,
   aiChoice,
+  github: githubOverride,
 }: {
   userId: string;
   jobId: string;
   aiChoice?: AiChoice;
+  /** Defaults to the user's GitHub login; scripts pass their own client. */
+  github?: RepoApi;
 }): Promise<{ analysisId: string; score: number | null }> {
   const job = await db.job.findFirst({
     where: { id: jobId, userId },
@@ -55,7 +58,7 @@ export async function runAnalysis({
   const started = Date.now();
 
   try {
-    const github = octokitRepoApi(await githubFor(userId));
+    const github = githubOverride ?? octokitRepoApi(await githubFor(userId));
     const result = await findEvidence({
       job: extracted.data,
       cvText: profile.cvText,

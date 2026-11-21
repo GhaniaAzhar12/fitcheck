@@ -15,7 +15,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "extract:try": "bun --conditions=react-server scripts/try-extract.ts",
-    "evidence:try": "bun --conditions=react-server scripts/try-evidence.ts"
+    "evidence:try": "bun --conditions=react-server scripts/try-evidence.ts",
+    "pipeline:try": "bun --conditions=react-server scripts/try-pipeline.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.106",
