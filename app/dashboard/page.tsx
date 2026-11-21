@@ -8,15 +8,14 @@ import { SignOutButton } from "@/components/sign-out-button";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { db } from "@/lib/db";
-import { JobExtraction } from "@/lib/job-extraction";
 import { isOnboarded } from "@/lib/onboarding";
 import { requireSession } from "@/lib/session";
+import { TrackerTable } from "./tracker-table";
 
 export const metadata: Metadata = { title: "Dashboard · Fitcheck" };
 
@@ -33,71 +32,9 @@ export default function DashboardPage() {
         <UserCard />
       </Suspense>
       <Suspense fallback={<UserCardSkeleton />}>
-        <JobList />
+        <TrackerTable />
       </Suspense>
     </main>
-  );
-}
-
-async function JobList() {
-  const { user } = await requireSession();
-  const jobs = await db.job.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    take: 20,
-    select: { id: true, extracted: true, createdAt: true },
-  });
-
-  if (!jobs.length) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>No jobs yet</CardTitle>
-          <CardDescription>
-            Add your first job post to see its requirements.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Your jobs</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="flex flex-col divide-y">
-          {jobs.map((job) => {
-            const data = JobExtraction.safeParse(job.extracted).data;
-            return (
-              <li key={job.id}>
-                <Link
-                  href={`/jobs/${job.id}`}
-                  className="flex items-baseline justify-between gap-4 py-3 hover:text-foreground/70"
-                >
-                  <span className="font-medium">
-                    {data?.title ?? "Untitled job"}
-                    {data?.company ? (
-                      <span className="font-normal text-muted-foreground">
-                        {" "}
-                        · {data.company}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {job.createdAt.toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </CardContent>
-    </Card>
   );
 }
 

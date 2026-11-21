@@ -101,17 +101,19 @@ enum JobStatus {
 }
 
 model Job {
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  url       String?
-  rawText   String
+  id         String     @id @default(cuid())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url        String?
+  rawText    String
   /// Structured requirements pulled out by the model (JobExtraction schema)
-  extracted Json?
-  status    JobStatus @default(SAVED)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  analyses  Analysis[]
+  extracted  Json?
+  status     JobStatus  @default(SAVED)
+  /// When to chase this application next (tracker)
+  followUpAt DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  analyses   Analysis[]
 
   @@index([userId, createdAt])
   @@map("job")
