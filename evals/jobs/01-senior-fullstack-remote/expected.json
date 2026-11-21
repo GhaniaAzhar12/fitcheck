@@ -1,0 +1,76 @@
+{
+  "title": "Senior Full-Stack Engineer (TypeScript)",
+  "company": "Ledgerline",
+  "seniority": ["senior"],
+  "remote": "remote",
+  "locationAnyOf": ["cet", "utc+1", "europe"],
+  "minYearsExperience": 5,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "nextjs",
+      "anyOf": ["next.js", "nextjs"]
+    },
+    {
+      "id": "node-rest-apis",
+      "anyOf": ["node", "rest api*"]
+    },
+    {
+      "id": "postgresql",
+      "anyOf": ["postgres*"]
+    },
+    {
+      "id": "payments",
+      "anyOf": ["stripe", "payment*"]
+    },
+    {
+      "id": "testing",
+      "anyOf": ["test*", "jest", "playwright"]
+    },
+    {
+      "id": "written-english",
+      "anyOf": ["english"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "orm",
+      "anyOf": ["prisma", "drizzle"]
+    },
+    {
+      "id": "aws",
+      "anyOf": ["aws", "lambda"]
+    },
+    {
+      "id": "b2b-saas",
+      "anyOf": ["saas", "b2b"]
+    },
+    {
+      "id": "llm-apis",
+      "anyOf": ["llm*"]
+    }
+  ],
+  "stack": [
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "PostgreSQL",
+    "Stripe",
+    "Jest",
+    "Playwright",
+    "Prisma",
+    "Drizzle",
+    "AWS"
+  ],
+  "mustNotInclude": ["overlap", "learning budget", "30 days"],
+  "notes": "Baseline remote senior role. Time-zone overlap and benefits must not become requirements."
+}

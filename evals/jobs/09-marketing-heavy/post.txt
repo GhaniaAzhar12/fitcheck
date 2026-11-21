@@ -1,0 +1,12 @@
+Software Engineer
+Lumen Pay (fictional sample post)
+
+At Lumen Pay, we believe money should move as fast as messages. Founded in 2021, we've grown from a garage idea to a team of 80 passionate people across three continents, serving 15,000 small businesses with instant payouts, smart invoicing and beautiful dashboards. We were named one of the "Top 50 Fintechs to Watch" and we're backed by world-class investors who share our mission to make finance fair.
+
+Our culture is built on curiosity, kindness and craft. We celebrate wins together, learn from our mistakes in the open, and give everyone the autonomy to do their best work. Every Friday we host demo afternoons, and twice a year we meet in person for a week of planning and fun.
+
+Perks: home-office budget, learning stipend, four-day work week in August, and generous parental leave.
+
+The role: you'll build features across our payments platform. We're looking for 2+ years of experience with Ruby on Rails and React, plus a good understanding of SQL. Experience with Stripe or another payments API is a plus.
+
+Hybrid: 2 days a week in our Berlin office.

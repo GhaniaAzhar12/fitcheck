@@ -1,0 +1,38 @@
+{
+  "title": "Software Engineer",
+  "company": "Lumen Pay",
+  "seniority": ["junior", "mid"],
+  "remote": "hybrid",
+  "locationAnyOf": ["berlin"],
+  "minYearsExperience": 2,
+  "salary": false,
+  "mustHave": [
+    {
+      "id": "rails",
+      "anyOf": ["rails", "ruby"]
+    },
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "sql",
+      "anyOf": ["sql"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "payments-api",
+      "anyOf": ["stripe", "payment*"]
+    }
+  ],
+  "stack": ["Ruby on Rails", "React", "SQL", "Stripe"],
+  "mustNotInclude": [
+    "curiosity",
+    "kindness",
+    "parental leave",
+    "demo afternoons",
+    "four-day"
+  ],
+  "notes": "Long marketing copy; the real requirements are two sentences near the end."
+}

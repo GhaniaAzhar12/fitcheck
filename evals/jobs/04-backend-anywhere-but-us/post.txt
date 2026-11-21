@@ -1,0 +1,23 @@
+Backend Engineer (Node.js)
+Cartwheel Freight (fictional sample post)
+Location: Anywhere in the World
+
+Cartwheel Freight moves 2 million parcels a month for online stores. Our backend team owns the APIs that carriers, warehouses and shoppers rely on.
+
+What you'll work on
+- Designing and building REST and event-driven services in Node.js and TypeScript
+- Scaling our PostgreSQL and Redis data layer
+- Improving observability with OpenTelemetry and Grafana
+
+Requirements
+- 3+ years building backend services in production
+- Strong Node.js and TypeScript
+- Experience with PostgreSQL, including query optimisation
+- Experience with message queues (Kafka, RabbitMQ or SQS)
+- You must be authorised to work in the United States and live in a US time zone. This is a W-2 employee role; we can't hire contractors or sponsor visas.
+
+Nice to have
+- Experience with Kubernetes
+- Logistics or e-commerce background
+
+Pay: $120,000 – $145,000 a year plus benefits.

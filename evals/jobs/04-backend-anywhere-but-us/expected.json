@@ -1,0 +1,62 @@
+{
+  "title": "Backend Engineer (Node.js)",
+  "company": "Cartwheel Freight",
+  "seniority": ["mid"],
+  "remote": "remote",
+  "locationAnyOf": [
+    "united states",
+    "usa",
+    "u.s",
+    "us time",
+    "us only",
+    "us-based"
+  ],
+  "minYearsExperience": 3,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "node",
+      "anyOf": ["node"]
+    },
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "postgresql",
+      "anyOf": ["postgres*"]
+    },
+    {
+      "id": "message-queues",
+      "anyOf": ["queue*", "kafka", "rabbitmq", "sqs"]
+    },
+    {
+      "id": "us-work-authorization",
+      "anyOf": ["authori*", "united states", "us work"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "kubernetes",
+      "anyOf": ["kubernetes"]
+    },
+    {
+      "id": "logistics",
+      "anyOf": ["logistics", "e-commerce", "ecommerce"]
+    }
+  ],
+  "stack": [
+    "Node.js",
+    "TypeScript",
+    "PostgreSQL",
+    "Redis",
+    "Kafka",
+    "RabbitMQ",
+    "SQS",
+    "OpenTelemetry",
+    "Grafana",
+    "Kubernetes"
+  ],
+  "mustNotInclude": ["time zone", "benefits"],
+  "notes": "The header says 'Anywhere in the World' but the body requires US work authorisation: location must reflect the US rule."
+}

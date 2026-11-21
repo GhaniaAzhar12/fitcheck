@@ -1,0 +1,64 @@
+{
+  "title": "Full-Stack Engineer (Django + React)",
+  "company": "Tabula Health",
+  "seniority": ["mid", "senior"],
+  "remote": "remote",
+  "locationAnyOf": ["pakistan", "india", "bangladesh", "south asia"],
+  "minYearsExperience": 4,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "python-django",
+      "anyOf": ["django", "python"]
+    },
+    {
+      "id": "drf",
+      "anyOf": ["rest framework", "drf"]
+    },
+    {
+      "id": "react-typescript",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "postgresql",
+      "anyOf": ["postgres*"]
+    },
+    {
+      "id": "automated-tests",
+      "anyOf": ["test*", "pytest", "jest"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "aws",
+      "anyOf": ["aws", "ecs", "rds"]
+    },
+    {
+      "id": "celery-redis",
+      "anyOf": ["celery", "redis"]
+    },
+    {
+      "id": "healthcare",
+      "anyOf": ["healthcare", "regulated"]
+    }
+  ],
+  "stack": [
+    "Python",
+    "Django",
+    "Django REST Framework",
+    "React",
+    "TypeScript",
+    "PostgreSQL",
+    "pytest",
+    "Jest",
+    "AWS",
+    "Celery",
+    "Redis"
+  ],
+  "mustNotInclude": ["overlap", "bonus"],
+  "notes": "'Minimum' vs 'Preferred qualifications' headings; remote limited to South Asia; USD monthly pay. UK-hours overlap is an arrangement."
+}

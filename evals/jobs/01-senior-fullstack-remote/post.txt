@@ -1,0 +1,38 @@
+Senior Full-Stack Engineer (TypeScript) – Remote
+Company: Ledgerline (fictional sample post)
+
+About us
+Ledgerline builds invoicing and cash-flow software for 4,000+ small businesses across Europe. We're a 40-person, fully remote team and we ship every day.
+
+The role
+You'll own features end to end: from the Postgres schema to the React UI. You'll work closely with design and product, and mentor two mid-level engineers.
+
+What you'll do
+- Build and ship product features in our Next.js app and Node.js API
+- Design database schemas and write efficient SQL
+- Improve performance and reliability of our payments flows
+- Review code and help shape our engineering practices
+
+What we're looking for
+- 5+ years of professional software engineering experience
+- Strong TypeScript, React and Next.js
+- Experience building REST APIs with Node.js
+- Solid PostgreSQL knowledge (schema design, indexing, query tuning)
+- Experience with Stripe or another payments provider
+- Comfortable writing tests (Jest, Playwright or similar)
+- Clear written English; you'll work async across time zones
+
+Nice to have
+- Prisma or Drizzle ORM
+- Experience with AWS (Lambda, RDS, S3)
+- You've worked on a B2B SaaS product before
+- Experience integrating LLM APIs into product features
+
+Where
+Fully remote. You must overlap at least 4 hours with CET (UTC+1). We hire as contractors outside the EU.
+
+Salary
+€70,000 – €90,000 per year, depending on experience. Plus 30 days paid leave and a €1,500 learning budget.
+
+How to apply
+Send your CV and a short note about something you've built that you're proud of.

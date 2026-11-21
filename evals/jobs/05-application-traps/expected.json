@@ -1,0 +1,68 @@
+{
+  "title": "Full-Stack Developer (React + Node)",
+  "company": "Brightwave Studio",
+  "seniority": ["mid"],
+  "remote": "remote",
+  "locationAnyOf": ["europe", "asia", "utc"],
+  "minYearsExperience": 3,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "node",
+      "anyOf": ["node"]
+    },
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "rest-apis",
+      "anyOf": ["rest", "api*"]
+    },
+    {
+      "id": "database",
+      "anyOf": ["mongodb", "postgres*"]
+    },
+    {
+      "id": "written-english",
+      "anyOf": ["english", "communication*"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "nextjs",
+      "anyOf": ["next.js", "nextjs"]
+    },
+    {
+      "id": "docker",
+      "anyOf": ["docker"]
+    },
+    {
+      "id": "shipped-product",
+      "anyOf": ["ship*", "customer*"]
+    }
+  ],
+  "stack": [
+    "React",
+    "Node.js",
+    "TypeScript",
+    "MongoDB",
+    "PostgreSQL",
+    "Next.js",
+    "Docker"
+  ],
+  "mustNotInclude": [
+    "blue whale",
+    "take-home",
+    "disclosure",
+    "self-starter",
+    "team player",
+    "supervision",
+    "subject line"
+  ],
+  "notes": "Application steps and generic traits mixed into the post. None of them are requirements (Day 14's 'pineapple' problem)."
+}

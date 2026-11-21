@@ -1,0 +1,10 @@
+Staff Platform Engineer
+Northlake Data (fictional sample post) — Remote within the EU
+
+Northlake Data runs analytics pipelines for some of Europe's largest retailers, and our platform team keeps hundreds of services running smoothly. We're looking for a Staff Platform Engineer to set the technical direction for our internal developer platform.
+
+In this role you'll lead the design of our Kubernetes-based platform on Google Cloud, guide a team of five engineers, and work with product teams to make deployments safe and boring. Most of our platform code is written in Go, with infrastructure managed in Terraform, so you should be fluent in Go and have used Terraform to run real production infrastructure. We expect at least 8 years of software engineering experience, including several years running Kubernetes in production at scale, and a track record of leading technical decisions across teams.
+
+It would be a bonus if you've worked with service meshes such as Istio, or if you've contributed to open-source cloud-native projects. Experience with Python is also useful, as our data teams use it heavily.
+
+We offer €110,000 – €135,000, 30 days of holiday, and a yearly conference budget.

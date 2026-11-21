@@ -1,0 +1,61 @@
+{
+  "title": "Junior React Developer",
+  "company": "Indus Apps",
+  "seniority": ["junior"],
+  "remote": "onsite",
+  "locationAnyOf": ["lahore"],
+  "minYearsExperience": 0,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "javascript",
+      "anyOf": ["javascript", "es6"]
+    },
+    {
+      "id": "html",
+      "anyOf": ["html"]
+    },
+    {
+      "id": "css",
+      "anyOf": ["css"]
+    },
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "git",
+      "anyOf": ["git"]
+    },
+    {
+      "id": "degree",
+      "anyOf": ["degree", "bachelor*", "computer science"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "tailwind",
+      "anyOf": ["tailwind"]
+    },
+    {
+      "id": "portfolio",
+      "anyOf": ["portfolio", "github", "personal project*"]
+    }
+  ],
+  "stack": [
+    "React",
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "Git",
+    "TypeScript",
+    "Tailwind CSS",
+    "Figma"
+  ],
+  "mustNotInclude": ["10am", "monday to friday", "working hours"],
+  "notes": "Junior, fresh grads welcome (0 years), on-site in Lahore, salary in PKR per month."
+}

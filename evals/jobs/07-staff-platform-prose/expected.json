@@ -1,0 +1,44 @@
+{
+  "title": "Staff Platform Engineer",
+  "company": "Northlake Data",
+  "seniority": ["lead", "principal"],
+  "remote": "remote",
+  "locationAnyOf": ["eu", "europe"],
+  "minYearsExperience": 8,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "go",
+      "anyOf": ["go", "golang"]
+    },
+    {
+      "id": "terraform",
+      "anyOf": ["terraform"]
+    },
+    {
+      "id": "kubernetes",
+      "anyOf": ["kubernetes"]
+    },
+    {
+      "id": "technical-leadership",
+      "anyOf": ["lead*"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "service-mesh",
+      "anyOf": ["istio", "service mesh"]
+    },
+    {
+      "id": "open-source",
+      "anyOf": ["open-source", "open source"]
+    },
+    {
+      "id": "python",
+      "anyOf": ["python"]
+    }
+  ],
+  "stack": ["Go", "Terraform", "Kubernetes", "Google Cloud", "Istio", "Python"],
+  "mustNotInclude": ["holiday", "conference"],
+  "notes": "Requirements are written as prose with no bullets; 'it would be a bonus' marks the nice-to-haves."
+}

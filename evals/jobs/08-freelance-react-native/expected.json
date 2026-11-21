@@ -1,0 +1,44 @@
+{
+  "title": "Freelance React Native Developer (Part-time, Remote)",
+  "company": "Pocketfit",
+  "seniority": ["junior", "mid"],
+  "remote": "remote",
+  "locationAnyOf": ["worldwide", "anywhere", "global"],
+  "minYearsExperience": 2,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "react-native",
+      "anyOf": ["react native"]
+    },
+    {
+      "id": "expo",
+      "anyOf": ["expo"]
+    },
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "app-store-publishing",
+      "anyOf": ["app store", "google play", "publish*"]
+    },
+    {
+      "id": "firebase",
+      "anyOf": ["firebase", "firestore"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "in-app-purchases",
+      "anyOf": ["in-app", "revenuecat"]
+    },
+    {
+      "id": "fitness",
+      "anyOf": ["fitness", "health*"]
+    }
+  ],
+  "stack": ["React Native", "Expo", "TypeScript", "Firebase", "RevenueCat"],
+  "mustNotInclude": ["20 hours", "part-time", "tell us about"],
+  "notes": "Freelance hourly rate ($40–60/hr) and part-time hours: hours are an arrangement, not a requirement."
+}

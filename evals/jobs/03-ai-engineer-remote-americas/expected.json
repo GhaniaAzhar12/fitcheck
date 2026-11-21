@@ -1,0 +1,70 @@
+{
+  "title": "AI Product Engineer",
+  "company": "Northwind Health AI",
+  "seniority": ["mid", "senior"],
+  "remote": "remote",
+  "locationAnyOf": ["americas", "utc-3", "utc-8"],
+  "minYearsExperience": 3,
+  "salary": true,
+  "mustHave": [
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "python",
+      "anyOf": ["python"]
+    },
+    {
+      "id": "llm-apis",
+      "anyOf": ["llm*", "openai", "anthropic", "gemini"]
+    },
+    {
+      "id": "rag",
+      "anyOf": ["retriev*", "rag", "embedding*", "vector*"]
+    },
+    {
+      "id": "evals",
+      "anyOf": ["eval*"]
+    },
+    {
+      "id": "postgresql",
+      "anyOf": ["postgres*"]
+    },
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "pgvector",
+      "anyOf": ["pgvector"]
+    },
+    {
+      "id": "ai-sdk",
+      "anyOf": ["ai sdk", "langchain"]
+    },
+    {
+      "id": "healthcare",
+      "anyOf": ["health*", "hipaa"]
+    },
+    {
+      "id": "docker-gcp",
+      "anyOf": ["docker", "gcp"]
+    }
+  ],
+  "stack": [
+    "TypeScript",
+    "Python",
+    "PostgreSQL",
+    "pgvector",
+    "React",
+    "Vercel AI SDK",
+    "LangChain",
+    "Docker",
+    "GCP"
+  ],
+  "mustNotInclude": ["cover letter", "equity"],
+  "notes": "'pgvector is a plus' sits inside the must list and must be nice-to-have. Remote limited to the Americas."
+}

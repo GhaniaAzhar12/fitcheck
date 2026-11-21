@@ -1,0 +1,20 @@
+Full-Stack Engineer (Django + React)
+Tabula Health (fictional sample post)
+Remote (Pakistan, India, Bangladesh) · Full-time
+
+Tabula Health builds scheduling and billing software for clinics in the UK and Middle East. Our engineering team is fully remote across South Asia.
+
+Minimum qualifications
+- 4+ years of professional software development
+- Strong Python and Django, including Django REST Framework
+- Strong React with TypeScript
+- Solid PostgreSQL and data modelling skills
+- Experience writing automated tests (pytest, Jest or similar)
+- Able to overlap 4 hours with UK working hours
+
+Preferred qualifications
+- Experience with AWS (ECS, RDS, S3)
+- Experience with Celery and Redis
+- Healthcare or regulated-industry experience
+
+Compensation: USD 2,500 – 3,500 per month, paid monthly, plus annual bonus.

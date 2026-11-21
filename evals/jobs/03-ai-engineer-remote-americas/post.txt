@@ -1,0 +1,25 @@
+AI Product Engineer
+Northwind Health AI (fictional sample post)
+Remote — Americas only (UTC-3 to UTC-8)
+
+Northwind Health AI helps clinics summarise patient notes and automate paperwork with large language models. We just raised our Series A and are growing the product engineering team from 6 to 12.
+
+As an AI Product Engineer, you'll design and ship LLM-powered features that clinicians use every day: retrieval-augmented generation over clinical guidelines, structured extraction from messy notes, and agent workflows that fill in forms. You'll own evaluation too: we don't ship prompts without evals.
+
+Requirements
+- 3+ years building production web applications
+- Strong in TypeScript and Python
+- Hands-on experience shipping features with LLM APIs (OpenAI, Anthropic, Gemini or similar)
+- Experience with retrieval-augmented generation (embeddings, vector search)
+- You've written evals or automated tests for LLM outputs
+- Experience with PostgreSQL; pgvector is a plus
+- Comfortable with React on the frontend
+
+Preferred
+- Vercel AI SDK or LangChain
+- Experience in healthcare or another regulated industry (HIPAA)
+- Familiarity with Docker and GCP
+
+Compensation: $140k–$175k base + equity. Health, dental and vision for US employees; contractors elsewhere in the Americas.
+
+We value curiosity, written communication and a bias to ship. No cover letter needed — just your CV and a link to something you've built with LLMs.

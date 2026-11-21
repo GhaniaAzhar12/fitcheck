@@ -1,0 +1,66 @@
+{
+  "title": "Frontend Developer (React)",
+  "company": "Brightpath Learning",
+  "seniority": ["mid"],
+  "remote": "hybrid",
+  "locationAnyOf": ["london"],
+  "minYearsExperience": 2,
+  "salary": false,
+  "mustHave": [
+    {
+      "id": "react",
+      "anyOf": ["react"]
+    },
+    {
+      "id": "typescript",
+      "anyOf": ["typescript"]
+    },
+    {
+      "id": "html",
+      "anyOf": ["html"]
+    },
+    {
+      "id": "css",
+      "anyOf": ["css"]
+    },
+    {
+      "id": "accessibility",
+      "anyOf": ["accessib*", "wcag"]
+    },
+    {
+      "id": "apis",
+      "anyOf": ["graphql", "rest"]
+    },
+    {
+      "id": "uk-right-to-work",
+      "anyOf": ["right to work", "uk"]
+    }
+  ],
+  "niceToHave": [
+    {
+      "id": "tailwind",
+      "anyOf": ["tailwind"]
+    },
+    {
+      "id": "rtl",
+      "anyOf": ["testing library"]
+    },
+    {
+      "id": "edtech",
+      "anyOf": ["education", "edtech"]
+    }
+  ],
+  "stack": [
+    "React",
+    "TypeScript",
+    "HTML",
+    "CSS",
+    "GraphQL",
+    "Storybook",
+    "Figma",
+    "Tailwind CSS",
+    "React Testing Library"
+  ],
+  "mustNotInclude": ["cycle-to-work", "health insurance", "team lunches"],
+  "notes": "Hybrid with a right-to-work rule (matters for the verdict). No salary stated."
+}

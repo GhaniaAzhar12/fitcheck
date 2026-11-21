@@ -1,0 +1,24 @@
+Junior React Developer
+Indus Apps (fictional sample post)
+Lahore, Pakistan · On-site (Gulberg office) · Full-time
+
+Indus Apps builds web and mobile products for retail brands in Pakistan and the Gulf. We're hiring a Junior React Developer to join our frontend team.
+
+Responsibilities
+- Build UI components in React from Figma designs
+- Connect screens to REST APIs
+- Fix bugs and write simple unit tests
+
+Requirements
+- 0–1 years of experience; fresh graduates are welcome
+- Bachelor's degree in Computer Science or a related field
+- Good understanding of JavaScript (ES6+), HTML and CSS
+- Basic knowledge of React and Git
+
+Preferred
+- Familiarity with TypeScript
+- Experience with Tailwind CSS
+- A portfolio or GitHub with personal projects
+
+Salary: PKR 80,000 – 120,000 per month.
+Working hours: Monday to Friday, 10am to 7pm.

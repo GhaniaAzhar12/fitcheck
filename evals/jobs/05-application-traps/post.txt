@@ -1,0 +1,26 @@
+Full-Stack Developer (React + Node)
+Brightwave Studio (fictional sample post) · Remote, Europe or Asia (UTC to UTC+6)
+
+We're a 12-person product studio building web apps for health and education startups.
+
+You'll be a great fit if you have:
+- 3+ years of full-stack experience with React and Node.js
+- Solid TypeScript
+- Experience designing and consuming REST APIs
+- Hands-on experience with MongoDB or PostgreSQL
+- Good communication in written English
+
+Bonus:
+- Next.js
+- Experience with Docker
+- You've shipped a product used by real customers
+
+About you: you're a self-starter, a team player, and you work well without supervision.
+
+How to apply (please read carefully):
+1. Put the words "blue whale" in the subject line of your email so we know you read this.
+2. Complete our 2-hour take-home assignment after the first call.
+3. If you used AI tools to write your application, include a short disclosure.
+4. Send your CV and GitHub to jobs@brightwave.example.
+
+Salary: €3,000 – €4,200 per month, full-time.
