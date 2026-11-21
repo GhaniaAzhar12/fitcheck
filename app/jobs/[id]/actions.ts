@@ -6,7 +6,11 @@ import { aiChoiceFrom } from "@/lib/ai-choice";
 import { AnalysisError, runAnalysis } from "@/lib/run-analysis";
 import { getSession } from "@/lib/session";
 
-export type AnalyzeState = { error?: string; doneAt?: number };
+export type AnalyzeState = {
+  error?: string;
+  doneAt?: number;
+  score?: number | null;
+};
 
 export async function analyzeJob(
   _prev: AnalyzeState,
@@ -18,12 +22,13 @@ export async function analyzeJob(
   const jobId = String(formData.get("jobId") ?? "");
   if (!jobId) return { error: "Missing job." };
 
+  let score: number | null;
   try {
-    await runAnalysis({
+    ({ score } = await runAnalysis({
       userId: session.user.id,
       jobId,
       aiChoice: aiChoiceFrom(formData),
-    });
+    }));
   } catch (error) {
     return {
       error:
@@ -34,5 +39,5 @@ export async function analyzeJob(
   }
 
   revalidatePath(`/jobs/${jobId}`);
-  return { doneAt: Date.now() };
+  return { doneAt: Date.now(), score };
 }

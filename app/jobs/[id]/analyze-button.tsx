@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
@@ -29,6 +30,17 @@ export function AnalyzeButton({
   // The model choice saved in setup (key stays in this browser).
   const [aiFields, setAiFields] = useState<Record<string, string>>({});
   useEffect(() => setAiFields(aiFormFields(loadAiSettings())), []);
+
+  // A run can take a minute, so say when it's done in case they scrolled away.
+  useEffect(() => {
+    if (state.doneAt) {
+      toast.success(
+        state.score != null
+          ? `Analysis finished: ${state.score}/100`
+          : "Analysis finished",
+      );
+    }
+  }, [state.doneAt, state.score]);
 
   const [seconds, setSeconds] = useState(0);
   useEffect(() => {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { CardSkeleton } from "@/components/skeletons";
 import { requireSession } from "@/lib/session";
 
 import { NewJobForm } from "./new-job-form";
@@ -27,9 +28,7 @@ export default function NewJobPage() {
           Paste a job link or the job text. We'll pull out the requirements.
         </p>
       </div>
-      <Suspense
-        fallback={<div className="h-96 animate-pulse rounded-xl bg-muted" />}
-      >
+      <Suspense fallback={<CardSkeleton lines={6} />}>
         <SignedInForm />
       </Suspense>
     </main>

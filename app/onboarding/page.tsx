@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { CardSkeleton } from "@/components/skeletons";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -57,9 +58,7 @@ export default function OnboardingPage({
           minute.
         </p>
       </div>
-      <Suspense
-        fallback={<div className="h-80 animate-pulse rounded-xl bg-muted" />}
-      >
+      <Suspense fallback={<CardSkeleton lines={5} />}>
         <Onboarding searchParams={searchParams} />
       </Suspense>
     </main>

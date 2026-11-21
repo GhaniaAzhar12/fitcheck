@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import {
   Table,
@@ -29,9 +30,9 @@ import { type TrackerResult, updateFollowUp, updateJobStatus } from "./actions";
 import { DeleteJobButton } from "./delete-job-button";
 
 const SCORE_STYLE = {
-  strong: "text-emerald-700 dark:text-emerald-400",
-  maybe: "text-amber-700 dark:text-amber-400",
-  weak: "text-destructive",
+  strong: "text-met",
+  maybe: "text-partial",
+  weak: "text-gap",
   none: "text-muted-foreground",
 } as const;
 
@@ -85,6 +86,7 @@ export function TrackerClient({ initialRows }: { initialRows: ClientRow[] }) {
       if (!result.ok) {
         setRows((all) => all.map((r) => (r.id === row.id ? row : r)));
         setErrors((e) => ({ ...e, [row.id]: result.error }));
+        toast.error(`Couldn't save ${row.role}: ${result.error}`);
       }
     });
   }

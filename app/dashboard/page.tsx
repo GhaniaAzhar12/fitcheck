@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { SignOutButton } from "@/components/sign-out-button";
+import { CardSkeleton, TrackerSkeleton } from "@/components/skeletons";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -31,7 +32,7 @@ export default function DashboardPage() {
       <Suspense fallback={<UserCardSkeleton />}>
         <UserCard />
       </Suspense>
-      <Suspense fallback={<UserCardSkeleton />}>
+      <Suspense fallback={<TrackerSkeleton />}>
         <TrackerTable />
       </Suspense>
     </main>
@@ -80,5 +81,5 @@ async function UserCard() {
 }
 
 function UserCardSkeleton() {
-  return <div className="h-24 animate-pulse rounded-xl bg-muted" />;
+  return <CardSkeleton lines={1} />;
 }

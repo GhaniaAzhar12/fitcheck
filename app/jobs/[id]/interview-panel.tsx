@@ -113,7 +113,7 @@ export function InterviewPanel({
                     {q.answer}
                   </p>
                   {q.unverified.length ? (
-                    <p className="text-xs text-amber-700 dark:text-amber-400">
+                    <p className="text-xs text-partial">
                       Check: {q.unverified.join(", ")}{" "}
                       {q.unverified.length === 1 ? "isn't" : "aren't"} in your
                       CV. Fix before you say it.

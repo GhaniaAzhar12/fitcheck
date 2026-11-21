@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { JobSkeleton } from "@/components/skeletons";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -45,9 +46,7 @@ export default function JobPage({ params }: PageProps<"/jobs/[id]">) {
           + New job
         </Link>
       </div>
-      <Suspense
-        fallback={<div className="h-96 animate-pulse rounded-xl bg-muted" />}
-      >
+      <Suspense fallback={<JobSkeleton />}>
         <JobDetails params={params} />
       </Suspense>
     </main>

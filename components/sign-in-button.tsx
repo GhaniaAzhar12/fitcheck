@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
-export function SignInButton() {
+export function SignInButton({ className }: { className?: string } = {}) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,8 +24,13 @@ export function SignInButton() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <Button size="lg" onClick={signIn} disabled={pending}>
+    <div className="flex flex-col items-start gap-2">
+      <Button
+        size="lg"
+        onClick={signIn}
+        disabled={pending}
+        className={className}
+      >
         {pending ? "Opening GitHub…" : "Sign in with GitHub"}
       </Button>
       {error ? (

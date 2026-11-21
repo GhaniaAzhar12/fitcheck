@@ -1,3 +1,6 @@
+import Link from "next/link";
+
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -37,11 +40,18 @@ export async function TrackerTable() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>No jobs yet</CardTitle>
+          <CardTitle>Check your first job</CardTitle>
           <CardDescription>
-            Add your first job post to see how well you fit it.
+            Paste a job post you're thinking about. Fitcheck pulls out the
+            requirements, looks for proof in your CV and repos, and tells you
+            whether to apply.
           </CardDescription>
         </CardHeader>
+        <CardContent>
+          <Link href="/jobs/new" className={buttonVariants()}>
+            Add a job post
+          </Link>
+        </CardContent>
       </Card>
     );
   }

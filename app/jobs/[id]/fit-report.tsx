@@ -7,10 +7,9 @@ import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 import { parseReport, type Verdict } from "@/lib/report-blocks";
 
 const VERDICT_STYLE: Record<Verdict, string> = {
-  apply:
-    "border-emerald-600/30 bg-emerald-600/10 text-emerald-800 dark:text-emerald-300",
-  plan: "border-amber-600/30 bg-amber-500/10 text-amber-800 dark:text-amber-300",
-  skip: "border-destructive/30 bg-destructive/10 text-destructive",
+  apply: "border-met/30 bg-met/10 text-met",
+  plan: "border-partial/30 bg-partial/10 text-partial",
+  skip: "border-gap/30 bg-gap/10 text-gap",
 };
 
 type Status = "idle" | "streaming" | "done" | "error";

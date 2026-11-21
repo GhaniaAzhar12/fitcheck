@@ -2,6 +2,7 @@
 
 import { Trash2Icon } from "lucide-react";
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -39,6 +40,7 @@ export function DeleteJobButton({
       if (result.ok) {
         setOpen(false);
         onDeleted();
+        toast.success(`Deleted ${label}`);
       } else {
         setError(result.error);
       }
