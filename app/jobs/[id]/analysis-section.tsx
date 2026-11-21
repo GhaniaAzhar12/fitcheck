@@ -10,6 +10,7 @@ import type { Evidence, ToolCallLog } from "@/lib/agent/evidence";
 import { db } from "@/lib/db";
 
 import { AnalyzeButton } from "./analyze-button";
+import { FitReport } from "./fit-report";
 
 const STATUS = {
   met: { icon: "✅", label: "Met" },
@@ -64,7 +65,17 @@ export async function AnalysisSection({ jobId }: { jobId: string }) {
               </p>
             </div>
 
-            <ul className="flex flex-col divide-y">
+            {/* Keyed by run so a new analysis starts a fresh report. */}
+            <FitReport
+              key={done.id}
+              analysisId={done.id}
+              initialReport={done.report}
+            />
+
+            <h3 className="border-t pt-4 text-sm font-semibold">
+              Evidence for each requirement
+            </h3>
+            <ul className="-mt-2 flex flex-col divide-y">
               {evidence.map((e) => (
                 <li
                   key={`${e.kind}-${e.requirement}`}
