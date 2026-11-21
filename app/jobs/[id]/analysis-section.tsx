@@ -18,7 +18,14 @@ const STATUS = {
   gap: { icon: "❌", label: "Gap" },
 } as const;
 
-export async function AnalysisSection({ jobId }: { jobId: string }) {
+export async function AnalysisSection({
+  jobId,
+  autoStart = false,
+}: {
+  jobId: string;
+  /** Just added: start the first analysis without a click. */
+  autoStart?: boolean;
+}) {
   const [latest, runs] = await Promise.all([
     db.analysis.findFirst({
       where: { jobId },
@@ -139,7 +146,12 @@ export async function AnalysisSection({ jobId }: { jobId: string }) {
           </>
         ) : null}
 
-        <AnalyzeButton jobId={jobId} rerun={Boolean(done)} />
+        <AnalyzeButton
+          jobId={jobId}
+          rerun={Boolean(done)}
+          // Only for a job with no runs yet, so it never repeats work.
+          autoStart={autoStart && !latest}
+        />
       </CardContent>
     </Card>
   );

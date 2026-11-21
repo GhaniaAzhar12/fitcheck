@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { CardSkeleton } from "@/components/skeletons";
 import { requireSession } from "@/lib/session";
 
+import { BookmarkletInstall } from "./bookmarklet-install";
 import { NewJobForm } from "./new-job-form";
 
 export const metadata: Metadata = { title: "New job · Fitcheck" };
@@ -31,6 +32,7 @@ export default function NewJobPage() {
       <Suspense fallback={<CardSkeleton lines={6} />}>
         <SignedInForm />
       </Suspense>
+      <BookmarkletInstall />
     </main>
   );
 }

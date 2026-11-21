@@ -5,6 +5,8 @@ import { isIP } from "node:net";
 
 import * as cheerio from "cheerio";
 
+import { unreadableSourceMessage } from "@/lib/job-sources";
+
 const TIMEOUT_MS = 15_000;
 const MAX_BYTES = 3_000_000;
 const MAX_REDIRECTS = 3;
@@ -19,6 +21,10 @@ export class JobPageError extends Error {}
  * Prefers the schema.org JobPosting data most job boards embed.
  */
 export async function fetchJobPage(rawUrl: string): Promise<string> {
+  // Google Jobs and LinkedIn can't be read without a browser or login.
+  const unreadable = unreadableSourceMessage(rawUrl);
+  if (unreadable) throw new JobPageError(unreadable);
+
   const html = await download(rawUrl);
   const $ = cheerio.load(html);
 
@@ -33,7 +39,7 @@ export async function fetchJobPage(rawUrl: string): Promise<string> {
 
   if (text.length < MIN_TEXT) {
     throw new JobPageError(
-      "We couldn't read a job post on that page (it may need a login, like LinkedIn). Paste the job text instead.",
+      "That page didn't contain a readable job post. Some sites only load it in a browser or behind a login. Paste the job text instead.",
     );
   }
   return text;
@@ -71,9 +77,7 @@ async function download(rawUrl: string): Promise<string> {
       continue;
     }
     if (!res.ok) {
-      throw new JobPageError(
-        `That page returned an error (${res.status}). Check the link or paste the job text instead.`,
-      );
+      throw new JobPageError(httpErrorMessage(res.status, res.headers));
     }
     const type = res.headers.get("content-type") ?? "";
     if (!type.includes("html") && !type.includes("text/plain")) {
@@ -91,6 +95,26 @@ async function download(rawUrl: string): Promise<string> {
     return body;
   }
   throw new JobPageError("That link redirects too many times.");
+}
+
+/**
+ * Plain advice for a failed page fetch. Sites behind bot protection (often
+ * Cloudflare) refuse automated readers on purpose; we don't try to get
+ * around that, we ask for the text instead.
+ */
+export function httpErrorMessage(status: number, headers: Headers): string {
+  const botWall =
+    status === 401 ||
+    status === 403 ||
+    status === 429 ||
+    (status === 503 && /cloudflare/i.test(headers.get("server") ?? ""));
+  if (botWall) {
+    return "That site blocks automated readers, so Fitcheck can't open it. Copy the job description from the page and paste it into Job text.";
+  }
+  if (status === 404 || status === 410) {
+    return "That job page doesn't exist any more (it may have been taken down). Check the link, or paste the job text if you still have it.";
+  }
+  return `That page returned an error (${status}). Check the link or paste the job text instead.`;
 }
 
 function parseUrl(raw: string): URL {

@@ -29,7 +29,10 @@ export const metadata: Metadata = { title: "Job · Fitcheck" };
 // (up to 120 s) plus the judge (up to 90 s) on a slow free-tier model.
 export const maxDuration = 300;
 
-export default function JobPage({ params }: PageProps<"/jobs/[id]">) {
+export default function JobPage({
+  params,
+  searchParams,
+}: PageProps<"/jobs/[id]">) {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-12">
       <div className="flex items-center justify-between gap-4">
@@ -47,14 +50,18 @@ export default function JobPage({ params }: PageProps<"/jobs/[id]">) {
         </Link>
       </div>
       <Suspense fallback={<JobSkeleton />}>
-        <JobDetails params={params} />
+        <JobDetails params={params} searchParams={searchParams} />
       </Suspense>
     </main>
   );
 }
 
-async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
+async function JobDetails({
+  params,
+  searchParams,
+}: Pick<PageProps<"/jobs/[id]">, "params" | "searchParams">) {
   const { id } = await params;
+  const query = await searchParams;
   const { user } = await requireSession();
 
   // Scoped to the signed-in user: other people's jobs are a 404.
@@ -84,6 +91,16 @@ async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
 
   return (
     <div className="flex flex-col gap-4">
+      {query.existing === "1" ? (
+        <output className="block rounded-lg border bg-card px-4 py-3 text-sm text-muted-foreground">
+          You already saved this job on{" "}
+          {job.createdAt.toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          })}
+          , so here it is instead of a copy.
+        </output>
+      ) : null}
       <Card>
         <CardHeader className="gap-2">
           <CardTitle className="text-xl">{data.title}</CardTitle>
@@ -118,7 +135,7 @@ async function JobDetails({ params }: Pick<PageProps<"/jobs/[id]">, "params">) {
       <JobTabs
         report={
           <>
-            <AnalysisSection jobId={job.id} />
+            <AnalysisSection jobId={job.id} autoStart={query.analyze === "1"} />
 
             <RequirementList title="Must have" items={data.mustHave} />
             <RequirementList title="Nice to have" items={data.niceToHave} />

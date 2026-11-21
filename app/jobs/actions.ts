@@ -9,6 +9,7 @@ import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
 import { db } from "@/lib/db";
 import { extractJob, JobTextError } from "@/lib/extract-job";
 import { fetchJobPage, JobPageError } from "@/lib/fetch-job-page";
+import { normalizeJobUrl } from "@/lib/job-url";
 import { getSession } from "@/lib/session";
 
 export type CreateJobState = {
@@ -47,6 +48,10 @@ export async function createJob(
   }
   const { url, text } = parsed.data;
 
+  // Already saved? Open it instead of making a duplicate (and spending tokens).
+  const existingId = await findExistingJob(session.user.id, url, text);
+  if (existingId) redirect(`/jobs/${existingId}?existing=1`);
+
   let jobId: string;
   try {
     // Pasted text wins: it's what the user actually sees.
@@ -70,7 +75,38 @@ export async function createJob(
   }
 
   // Outside try/catch: redirect() works by throwing.
-  redirect(`/jobs/${jobId}`);
+  // ?analyze=1 starts the fit analysis on arrival: paste → verdict in one go.
+  redirect(`/jobs/${jobId}?analyze=1`);
+}
+
+/**
+ * The user's saved job with the same link (ignoring tracking bits), or the
+ * same text. The link is checked first: text sent by the bookmarklet can
+ * differ a little each time (ads, "posted 3 days ago").
+ */
+async function findExistingJob(
+  userId: string,
+  url: string,
+  text: string,
+): Promise<string | null> {
+  const wanted = url ? normalizeJobUrl(url) : null;
+  if (wanted) {
+    const saved = await db.job.findMany({
+      where: { userId, url: { not: null } },
+      select: { id: true, url: true },
+      orderBy: { createdAt: "desc" },
+    });
+    const match = saved.find((j) => j.url && normalizeJobUrl(j.url) === wanted);
+    if (match) return match.id;
+  }
+  if (text) {
+    const same = await db.job.findFirst({
+      where: { userId, rawText: text },
+      select: { id: true },
+    });
+    if (same) return same.id;
+  }
+  return null;
 }
 
 function friendlyError(error: unknown): string {

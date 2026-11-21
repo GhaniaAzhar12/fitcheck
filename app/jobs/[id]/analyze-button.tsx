@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -19,9 +19,12 @@ function hint(seconds: number) {
 export function AnalyzeButton({
   jobId,
   rerun,
+  autoStart = false,
 }: {
   jobId: string;
   rerun: boolean;
+  /** Start right away, e.g. just after the job was added. */
+  autoStart?: boolean;
 }) {
   const [state, formAction, pending] = useActionState<AnalyzeState, FormData>(
     analyzeJob,
@@ -29,7 +32,22 @@ export function AnalyzeButton({
   );
   // The model choice saved in setup (key stays in this browser).
   const [aiFields, setAiFields] = useState<Record<string, string>>({});
-  useEffect(() => setAiFields(aiFormFields(loadAiSettings())), []);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setAiFields(aiFormFields(loadAiSettings()));
+    setReady(true);
+  }, []);
+
+  // Auto-start once the model settings are in the form, then drop
+  // ?analyze=1 from the address so a reload doesn't start another run.
+  const formRef = useRef<HTMLFormElement>(null);
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (!autoStart || !ready || autoStarted.current) return;
+    autoStarted.current = true;
+    formRef.current?.requestSubmit();
+    window.history.replaceState(null, "", window.location.pathname);
+  }, [autoStart, ready]);
 
   // A run can take a minute, so say when it's done in case they scrolled away.
   useEffect(() => {
@@ -51,7 +69,7 @@ export function AnalyzeButton({
   }, [pending]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-3">
+    <form ref={formRef} action={formAction} className="flex flex-col gap-3">
       <input type="hidden" name="jobId" value={jobId} />
       {Object.entries(aiFields).map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
