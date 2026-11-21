@@ -21,6 +21,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   jobs          Job[]
+  profile       Profile?
 
   @@map("user")
 }
@@ -73,6 +74,23 @@ model Verification {
 }
 
 // ─── Fitcheck ────────────────────────────────────────────────────────────────
+
+/// One per user: what the agent searches for evidence.
+model Profile {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Plain text pulled from the uploaded CV. The PDF itself is not stored.
+  cvText     String?
+  cvFileName String?
+  cvPages    Int?
+  /// GitHub repos chosen as evidence, as "owner/name".
+  repos      String[] @default([])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("profile")
+}
 
 enum JobStatus {
   SAVED
