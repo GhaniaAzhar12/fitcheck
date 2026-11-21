@@ -47,9 +47,30 @@ Each case scores 0–100 from weighted checks: must-have recall 30, stack recall
 
 ## Results
 
-| Date | Model | Overall | Notes |
-|---|---|---|---|
-| 21 Nov 2026 | gemini-3.1-flash-lite | **98.4** | Misses: US work authorisation dropped by the "time zone" filter (case 04); seniority "unknown" for a 2+ years role (case 09) |
+### Extraction (`eval:extract`, 10 cases)
+
+| Date | Model | Overall | Must-have recall | Seniority | Notes |
+|---|---|---|---|---|---|
+| 21 Nov 2026 (before) | gemini-3.1-flash-lite | 98.4 | 98% | 90% | Case 04: US work authorisation dropped by the "time zone" filter. Case 09: seniority "unknown" for a 2+ years role |
+| 21 Nov 2026 (after) | gemini-3.1-flash-lite | **99.8** | **100%** | **100%** | Fixes: eligibility rules always kept; seniority inferred from years. Only miss: Figma left out of one stack |
+
+### Evidence (`eval:evidence`, 5 jobs, 37 requirements)
+
+| Date | Model | Accuracy | Overclaims | Underclaims | Notes |
+|---|---|---|---|---|---|
+| 21 Nov 2026 (run 1) | gemini-3.1-flash-lite | **100%** | 0 | 0 | Every gap on the React Native job called a gap |
+| 21 Nov 2026 (run 2) | gemini-3.1-flash-lite | **100%** | 0 | 0 | Same result: consistent between runs |
+
+Free-tier Gemini sometimes times out after many calls in a row; a timed-out case is reported as failed and re-run, not counted as a wrong answer.
+
+## The evidence eval
+
+`evals/evidence/<job>.json` lists a job's requirements and, for each, the statuses an honest judge could give (`met`, `partial`, `gap`). The labels are calibrated to the author's own CV and GitHub repos, so this eval measures the judge, not the job. A status outside the acceptable set is an **overclaim** (too generous: the costly mistake in a fit check) or an **underclaim** (too strict).
+
+```bash
+bun run eval:evidence --provider google       # needs a signed-in user's CV, repos and GitHub token in the database
+bun run eval:evidence --job 08                # one job
+```
 
 ## Checking the labels
 

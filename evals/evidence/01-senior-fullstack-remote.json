@@ -1,0 +1,45 @@
+{
+  "job": "01-senior-fullstack-remote",
+  "requirements": [
+    {
+      "text": "Strong TypeScript",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "React and Next.js",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Building REST APIs with Node.js",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "PostgreSQL schema design and query tuning",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "Experience with Stripe or another payments provider",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Writing tests with Jest or Playwright",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "AWS (Lambda, RDS, S3)",
+      "kind": "niceToHave",
+      "expect": ["gap", "partial"]
+    },
+    {
+      "text": "Integrating LLM APIs into product features",
+      "kind": "niceToHave",
+      "expect": ["met", "partial"]
+    }
+  ]
+}

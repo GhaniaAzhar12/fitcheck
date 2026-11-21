@@ -1,0 +1,45 @@
+{
+  "job": "02-frontend-hybrid-london",
+  "requirements": [
+    {
+      "text": "2–4 years of commercial React experience",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "TypeScript",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "HTML and CSS, including responsive layouts",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "Web accessibility (WCAG 2.1 AA)",
+      "kind": "mustHave",
+      "expect": ["gap", "partial"]
+    },
+    {
+      "text": "Consuming GraphQL or REST APIs",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Right to work in the UK",
+      "kind": "mustHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "Tailwind CSS",
+      "kind": "niceToHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "React Testing Library",
+      "kind": "niceToHave",
+      "expect": ["met", "partial"]
+    }
+  ]
+}

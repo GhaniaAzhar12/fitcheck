@@ -27,6 +27,19 @@ describe("isRealRequirement", () => {
     }
   });
 
+  test("keeps eligibility rules even when they mention a time zone (Day 23 eval, case 04)", () => {
+    for (const item of [
+      "Authorized to work in the United States and live in a US time zone",
+      "Right to work in the UK",
+      "Must be eligible to work in the EU",
+      "Visa sponsorship not available",
+    ]) {
+      expect(isRealRequirement(item)).toBe(true);
+    }
+    // Plain arrangements are still dropped.
+    expect(isRealRequirement("Must live in a US time zone")).toBe(false);
+  });
+
   test("keeps real skills and experience", () => {
     for (const item of [
       "Proficiency in React",

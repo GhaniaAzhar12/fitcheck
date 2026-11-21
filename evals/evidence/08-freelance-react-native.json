@@ -1,0 +1,35 @@
+{
+  "job": "08-freelance-react-native",
+  "requirements": [
+    {
+      "text": "2+ years building mobile apps with React Native",
+      "kind": "mustHave",
+      "expect": ["gap", "partial"]
+    },
+    {
+      "text": "Experience with Expo",
+      "kind": "mustHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "Good TypeScript",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Publishing apps to the App Store and Google Play",
+      "kind": "mustHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "Firebase Auth and Firestore",
+      "kind": "mustHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "In-app purchases with RevenueCat",
+      "kind": "niceToHave",
+      "expect": ["gap"]
+    }
+  ]
+}

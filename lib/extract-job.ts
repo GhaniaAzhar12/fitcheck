@@ -21,7 +21,9 @@ Rules:
 - Requirements are ONLY skills, experience, knowledge or qualifications a CV or code could prove.
 - NOT requirements (leave them out): how to apply ("complete a take-home", "include X in your email", "send a cover letter", "disclose AI use"), working arrangements ("full-time", "remote", "overlap with CET", "work hours") which belong in remote/location, and generic traits ("self-starter", "onboard quickly", "work without supervision", "team player").
 - Ignore company marketing and benefits.
-- If something is not stated, use null (or "unknown" for seniority and remote).`;
+- seniority: use the title's level if it has one. If not, infer it from the minimum years: 0–1 junior, 2–4 mid, 5–7 senior, 8+ lead (principal only if the post says so). Use "unknown" only when neither the title nor the years give a clue.
+- Right to work, work authorisation, visa or citizenship rules ARE requirements, even when the same sentence mentions a time zone.
+- If something is not stated, use null (or "unknown" for remote).`;
 
 /**
  * Safety net for the rule above: drops items that are clearly application
@@ -36,7 +38,16 @@ const NOT_A_REQUIREMENT = [
   /\bonboard quickly\b|\bwithout supervision\b|\bself[- ]?starter\b|\bteam player\b/i,
 ];
 
+/**
+ * Legal eligibility always counts, even inside a sentence that also mentions
+ * a time zone ("authorised to work in the US and live in a US time zone").
+ * Found by the Day 23 eval: the time-zone rule was dropping these.
+ */
+const ELIGIBILITY =
+  /right to work|work(ing)? authori[sz]|authori[sz]ed to work|eligib\w* to work|\bvisa\b|sponsor|citizen|permit to work|work permit/i;
+
 export function isRealRequirement(item: string): boolean {
+  if (ELIGIBILITY.test(item)) return true;
   return !NOT_A_REQUIREMENT.some((pattern) => pattern.test(item));
 }
 

@@ -1,0 +1,40 @@
+{
+  "job": "10-django-react-south-asia",
+  "requirements": [
+    {
+      "text": "Python and Django, including Django REST Framework",
+      "kind": "mustHave",
+      "expect": ["partial", "met"]
+    },
+    {
+      "text": "React with TypeScript",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "PostgreSQL and data modelling",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "Automated tests (pytest, Jest or similar)",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "AWS (ECS, RDS, S3)",
+      "kind": "niceToHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "Celery and Redis",
+      "kind": "niceToHave",
+      "expect": ["gap"]
+    },
+    {
+      "text": "Healthcare or regulated-industry experience",
+      "kind": "niceToHave",
+      "expect": ["gap"]
+    }
+  ]
+}

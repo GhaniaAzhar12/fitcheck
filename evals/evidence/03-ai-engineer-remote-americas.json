@@ -1,0 +1,45 @@
+{
+  "job": "03-ai-engineer-remote-americas",
+  "requirements": [
+    {
+      "text": "Strong TypeScript",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Strong Python",
+      "kind": "mustHave",
+      "expect": ["partial", "gap"]
+    },
+    {
+      "text": "Shipping features with LLM APIs (OpenAI, Anthropic, Gemini)",
+      "kind": "mustHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "Retrieval-augmented generation with embeddings and vector search",
+      "kind": "mustHave",
+      "expect": ["gap", "partial"]
+    },
+    {
+      "text": "PostgreSQL",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Comfortable with React",
+      "kind": "mustHave",
+      "expect": ["met"]
+    },
+    {
+      "text": "Vercel AI SDK",
+      "kind": "niceToHave",
+      "expect": ["met", "partial"]
+    },
+    {
+      "text": "Healthcare or HIPAA experience",
+      "kind": "niceToHave",
+      "expect": ["gap"]
+    }
+  ]
+}
