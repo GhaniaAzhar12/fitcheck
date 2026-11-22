@@ -4,8 +4,11 @@ import type { AiChoice } from "@/lib/ai-choice";
 import { db } from "@/lib/db";
 import type { UsageKind } from "@/lib/generated/prisma/client";
 
-/** Free (app-key) analyses each user gets per rolling 24 hours. */
-export const FREE_ANALYSES_PER_DAY = 20;
+/**
+ * Free (app-key) analyses each user gets per rolling 24 hours. After that,
+ * each analysis takes 1 bought credit (Stripe test mode).
+ */
+export const FREE_ANALYSES_PER_DAY = 3;
 
 export type UsageRecord = {
   userId: string;
@@ -14,6 +17,8 @@ export type UsageRecord = {
   provider: string;
   model: string;
   aiChoice?: AiChoice;
+  /** A bought credit paid for this analysis. */
+  credit?: boolean;
   ok?: boolean;
   inputTokens?: number;
   outputTokens?: number;
@@ -31,6 +36,7 @@ export async function recordUsage(r: UsageRecord): Promise<void> {
         provider: r.provider,
         model: r.model,
         ownKey: Boolean(r.aiChoice?.apiKey),
+        credit: r.credit ?? false,
         ok: r.ok ?? true,
         inputTokens: r.inputTokens ?? 0,
         outputTokens: r.outputTokens ?? 0,
@@ -45,13 +51,14 @@ export async function recordUsage(r: UsageRecord): Promise<void> {
   }
 }
 
-/** Analyses on the app's own (free) key in the last 24 hours. */
+/** Free analyses (app key, no credit spent) in the last 24 hours. */
 export async function freeAnalysesToday(userId: string): Promise<number> {
   return db.usageEvent.count({
     where: {
       userId,
       kind: "ANALYSIS",
       ownKey: false,
+      credit: false,
       provider: { not: "ollama" },
       createdAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
     },

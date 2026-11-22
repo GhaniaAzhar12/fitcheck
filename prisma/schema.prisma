@@ -23,6 +23,7 @@ model User {
   jobs          Job[]
   profile       Profile?
   usageEvents   UsageEvent[]
+  creditEntries CreditEntry[]
 
   @@map("user")
 }
@@ -180,6 +181,8 @@ model UsageEvent {
   model        String
   /// True when the visitor's own API key paid for the call.
   ownKey       Boolean   @default(false)
+  /// True when a bought credit paid for this analysis (not the free allowance).
+  credit       Boolean   @default(false)
   ok           Boolean   @default(true)
   inputTokens  Int       @default(0)
   outputTokens Int       @default(0)
@@ -189,4 +192,29 @@ model UsageEvent {
   @@index([userId, createdAt])
   @@index([jobId])
   @@map("usage_event")
+}
+
+enum CreditReason {
+  PURCHASE
+  ANALYSIS
+  REFUND
+}
+
+/// The credits ledger: +10 per pack bought, -1 per paid analysis, +1 back if
+/// that analysis fails. The balance is the sum of delta, so every change is
+/// on record. Stripe test mode only: no real money.
+model CreditEntry {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  delta           Int
+  reason          CreditReason
+  /// The Checkout Session that paid for a pack. Unique, so a webhook that
+  /// arrives twice can't add the credits twice.
+  stripeSessionId String?      @unique
+  jobId           String?
+  createdAt       DateTime     @default(now())
+
+  @@index([userId, createdAt])
+  @@map("credit_entry")
 }

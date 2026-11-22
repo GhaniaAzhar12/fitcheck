@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { creditBalance } from "@/lib/credits";
 import { db } from "@/lib/db";
 import { formatUsd } from "@/lib/pricing";
 import { requireSession } from "@/lib/session";
@@ -64,12 +65,13 @@ export default function UsagePage() {
 async function UsageReport() {
   const { user } = await requireSession();
   const since = new Date(Date.now() - DAYS * 24 * 60 * 60 * 1000);
-  const [events, freeUsed] = await Promise.all([
+  const [events, freeUsed, credits] = await Promise.all([
     db.usageEvent.findMany({
       where: { userId: user.id, createdAt: { gte: since } },
       orderBy: { createdAt: "desc" },
     }),
     freeAnalysesToday(user.id),
+    creditBalance(user.id),
   ]);
 
   const all = totals(events);
@@ -87,11 +89,11 @@ async function UsageReport() {
             {freeUsed} of {FREE_ANALYSES_PER_DAY} used in the last 24 hours.{" "}
             {freeLeft
               ? `${freeLeft} left.`
-              : "Add your own API key in Set up to keep going."}{" "}
+              : "Each analysis now uses 1 credit."}{" "}
             Your own key or a local model has no limit.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-3">
           <div
             role="progressbar"
             aria-label="Free analyses used today"
@@ -105,6 +107,13 @@ async function UsageReport() {
               style={{ width: `${freePct}%` }}
             />
           </div>
+          <p className="text-sm">
+            <span className="font-medium tabular-nums">{credits}</span>{" "}
+            {credits === 1 ? "credit" : "credits"} left for extra analyses ·{" "}
+            <Link href="/credits" className="underline underline-offset-4">
+              Buy credits (test mode)
+            </Link>
+          </p>
         </CardContent>
       </Card>
 

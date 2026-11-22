@@ -5,6 +5,7 @@ import { octokitRepoApi, type RepoApi } from "@/lib/agent/repo-files";
 import { fitScore } from "@/lib/agent/score";
 import type { AiChoice } from "@/lib/ai-choice";
 import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
+import { refundCredit, spendCredit } from "@/lib/credits";
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { GitHubError, githubFor } from "@/lib/github";
@@ -61,12 +62,18 @@ export async function runAnalysis({
   }
 
   // Protect the shared free tier: own keys and local models are unlimited.
+  // Past the daily free allowance, each analysis takes 1 bought credit,
+  // taken up front and given back if the run fails.
+  let paidWithCredit = false;
   if (!usesOwnResources(aiChoice)) {
     const used = await freeAnalysesToday(userId);
     if (used >= FREE_ANALYSES_PER_DAY) {
-      throw new AnalysisError(
-        `You've used today's ${FREE_ANALYSES_PER_DAY} free analyses. Add your own API key in Set up to keep going, or try again tomorrow.`,
-      );
+      paidWithCredit = await spendCredit(userId, job.id);
+      if (!paidWithCredit) {
+        throw new AnalysisError(
+          `You've used today's ${FREE_ANALYSES_PER_DAY} free analyses. Buy credits on the Credits page (test mode, no real money), add your own API key in Set up, or try again tomorrow.`,
+        );
+      }
     }
   }
 
@@ -112,6 +119,7 @@ export async function runAnalysis({
       provider: result.provider,
       model: result.modelId,
       aiChoice,
+      credit: paidWithCredit,
       inputTokens: result.inputTokens,
       outputTokens: result.outputTokens,
       ms: result.ms,
@@ -123,6 +131,7 @@ export async function runAnalysis({
         ? error.message
         : (aiErrorMessage(error) ?? "The analysis failed. Try again.");
     console.error(`[analysis ${job.id}]`, errorSummary(error));
+    if (paidWithCredit) await refundCredit(userId, job.id);
     await db.analysis.create({
       data: {
         jobId: job.id,
@@ -140,6 +149,8 @@ export async function runAnalysis({
       provider,
       model: modelId,
       aiChoice,
+      // Refunded, so a failed run doesn't count against anything.
+      credit: paidWithCredit,
       ok: false,
       ms: Date.now() - started,
     });
