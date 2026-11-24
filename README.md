@@ -6,7 +6,7 @@
 
 ![Fitcheck home page with a sample fit report](docs/screenshots/home-light.png)
 
-<!-- Demo GIF: docs/demo.gif (recorded on Day 28) -->
+![Fitcheck analysing a job and listing the evidence for each requirement](docs/demo.gif)
 
 ## The problem
 
