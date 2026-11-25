@@ -6,6 +6,7 @@ import { fitScore } from "@/lib/agent/score";
 import type { AiChoice } from "@/lib/ai-choice";
 import { aiErrorMessage, errorSummary } from "@/lib/ai-errors";
 import { refundCredit, spendCredit } from "@/lib/credits";
+import { cvSearcherFor } from "@/lib/cv-searcher";
 import { db } from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { GitHubError, githubFor } from "@/lib/github";
@@ -79,12 +80,19 @@ export async function runAnalysis({
 
   const { provider, modelId } = getModel(aiChoice);
   const started = Date.now();
+  const cvSearch = await cvSearcherFor({
+    userId,
+    cvText: profile.cvText,
+    jobId: job.id,
+    aiChoice,
+  });
 
   try {
     const github = githubOverride ?? octokitRepoApi(await githubFor(userId));
     const result = await findEvidence({
       job: extracted.data,
       cvText: profile.cvText,
+      searchCv: cvSearch.search,
       repos: profile.repos,
       github,
       modelOptions: aiChoice,
@@ -155,5 +163,7 @@ export async function runAnalysis({
       ms: Date.now() - started,
     });
     throw new AnalysisError(message);
+  } finally {
+    await cvSearch.finish();
   }
 }

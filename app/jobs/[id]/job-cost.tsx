@@ -24,6 +24,7 @@ const KIND_LABEL = {
   TAILOR: "Tailored text",
   INTERVIEW: "Interview prep",
   KEY_CHECK: "Key check",
+  EMBED: "CV search vectors",
 } as const;
 
 const n = (x: number) => x.toLocaleString("en-GB");

@@ -2,7 +2,7 @@
 //
 //   bun run eval:extract                          → default model (AI_PROVIDER)
 //   bun run eval:extract --provider ollama        → local, free, no limits
-//   bun run eval:extract --provider google --model gemini-3.1-flash-lite
+//   bun run eval:extract --provider google --model gemini-3.5-flash-lite
 //   bun run eval:extract --case 05                → one case (prefix match)
 //
 // Results are saved to evals/results/<date>-<model>.json.

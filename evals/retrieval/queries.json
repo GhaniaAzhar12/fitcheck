@@ -1,0 +1,60 @@
+[
+  { "query": "API design", "relevant": ["REST services that carriers"] },
+  { "query": "Mentoring engineers", "relevant": ["Mentored two junior"] },
+  {
+    "query": "Leading a team",
+    "relevant": ["Mentored two junior", "fortnightly planning"]
+  },
+  {
+    "query": "Stripe or another payments provider",
+    "relevant": ["hosted checkout page"]
+  },
+  {
+    "query": "Server-side rendering",
+    "relevant": ["server-rendered React", "static product pages"]
+  },
+  {
+    "query": "PostgreSQL query performance",
+    "relevant": ["composite indexes"]
+  },
+  {
+    "query": "Observability and monitoring",
+    "relevant": ["Sentry and Grafana"]
+  },
+  {
+    "query": "Docker",
+    "relevant": ["Containerised the services", "Prisma, Redis, Docker"]
+  },
+  {
+    "query": "Next.js",
+    "relevant": ["storefront in Next.js", "Prisma, Redis, Docker"]
+  },
+  { "query": "End-to-end testing", "relevant": ["end-to-end browser tests"] },
+  { "query": "CI/CD pipelines", "relevant": ["run on every pull request"] },
+  {
+    "query": "Integrating data between systems",
+    "relevant": ["order-sync job"]
+  },
+  {
+    "query": "Frontend performance optimisation",
+    "relevant": ["bundle by 40%"]
+  },
+  { "query": "Accessibility", "relevant": ["WCAG 2.1 AA"] },
+  { "query": "Internationalisation (i18n)", "relevant": ["Welsh and Polish"] },
+  {
+    "query": "Integrating LLM APIs into product features",
+    "relevant": ["summarises support tickets", "vision model API"]
+  },
+  { "query": "Open-source contributions", "relevant": ["date-picker library"] },
+  { "query": "Turning designs into UI", "relevant": ["Figma designs"] },
+  { "query": "Agile sprint planning", "relevant": ["fortnightly planning"] },
+  { "query": "Real-time updates", "relevant": ["streaming updates"] },
+  { "query": "Caching with Redis", "relevant": ["Prisma, Redis, Docker"] },
+  { "query": "Improving conversion rates", "relevant": ["drop-off by 18%"] },
+  { "query": "iOS development with Swift", "relevant": [] },
+  { "query": "Embedded C firmware", "relevant": [] },
+  { "query": "SAP ERP configuration", "relevant": [] },
+  { "query": "Rust systems programming", "relevant": [] },
+  { "query": "Salesforce administration", "relevant": [] },
+  { "query": "Mobile apps in Flutter", "relevant": [] }
+]

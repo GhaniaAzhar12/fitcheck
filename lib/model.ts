@@ -11,7 +11,7 @@ export type Provider = (typeof PROVIDERS)[number];
 /** Used when AI_MODEL isn't set. */
 export const DEFAULT_MODELS: Record<Provider, string> = {
   ollama: "qwen2.5:7b", // free, runs on your Mac
-  google: "gemini-3.1-flash-lite", // free tier, stable
+  google: "gemini-3.5-flash-lite", // free tier (3.1 was often overloaded)
   anthropic: "claude-haiku-5-5", // paid, cheapest Claude
 };
 

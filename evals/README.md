@@ -72,6 +72,16 @@ bun run eval:evidence --provider google       # needs a signed-in user's CV, rep
 bun run eval:evidence --job 08                # one job
 ```
 
+## The retrieval eval
+
+`evals/retrieval/cv.md` is a **fictional** CV written so keywords and meaning disagree (outcomes instead of tool names, synonyms, abbreviations). `queries.json` has 28 requirement-style queries, each labelled with distinctive substrings of the CV lines that really prove it; 6 have no right answer, to measure false hits. A label that matches no chunk fails the run, so a typo can't quietly lower the score.
+
+```bash
+bun run eval:retrieval    # keyword vs vector vs hybrid; uses the app's Gemini key for embeddings
+```
+
+It reports recall@5 (share of the proof in the top 5), MRR (how high the first proof ranks) and the false-hit rate, for keyword, vector and hybrid at floors from 0.50 to 0.80. The floor in `lib/agent/hybrid-search.ts` is the highest-recall floor with no more false hits than keyword search. On the first run (2026-11-24): keyword 45.5% recall@5, hybrid at 0.65 86.4%, both with 0 false hits; at 0.60 half the no-answer queries got a hit, because the best no-answer similarity was 0.612. 28 queries is a small set, so treat the floor as a starting point.
+
 ## Checking the labels
 
 `bun run test` includes `lib/evals/cases.test.ts`, which fails if any label isn't grounded in its post: every concept must match the post, and every stack item, location word and trap must appear in it.

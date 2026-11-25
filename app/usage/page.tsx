@@ -36,6 +36,7 @@ const KIND_LABEL: Record<string, string> = {
   TAILOR: "Tailored text",
   INTERVIEW: "Interview prep",
   KEY_CHECK: "Key check",
+  EMBED: "CV search vectors",
 };
 
 const n = (x: number) => x.toLocaleString("en-GB");

@@ -1,0 +1,252 @@
+{
+  "ranAt": "2026-11-24T12:58:09.142Z",
+  "provider": "google",
+  "modelId": "gemini-3.5-flash-lite",
+  "search": "keyword",
+  "floor": null,
+  "summary": {
+    "accuracy": 100,
+    "correct": 29,
+    "overclaims": 0,
+    "underclaims": 0,
+    "total": 29,
+    "failedJobs": ["03-ai-engineer-remote-americas"]
+  },
+  "jobs": [
+    {
+      "job": "01-senior-fullstack-remote",
+      "rows": [
+        {
+          "requirement": "Strong TypeScript",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The candidate has 3+ years of experience with TypeScript and built the fitcheck repo using TypeScript and Zod validation."
+        },
+        {
+          "requirement": "React and Next.js",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The candidate's CV highlights professional experience building apps with React.js and Next.js, backed by the fitcheck Next.js codebase."
+        },
+        {
+          "requirement": "Building REST APIs with Node.js",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The CV highlights experience building REST and GraphQL APIs using Node.js, supported by API routes in the fitcheck repo."
+        },
+        {
+          "requirement": "PostgreSQL schema design and query tuning",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The fitcheck repo contains a complete Prisma PostgreSQL schema with relations, indexes, and enums."
+        },
+        {
+          "requirement": "Experience with Stripe or another payments provider",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The CV notes Stripe integration experience, and the fitcheck repository includes full Stripe checkout and webhook handling."
+        },
+        {
+          "requirement": "Writing tests with Jest or Playwright",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The CV lists Jest, React Testing Library, and Playwright, which are actively configured in the fitcheck repository."
+        },
+        {
+          "requirement": "AWS (Lambda, RDS, S3)",
+          "expect": ["gap", "partial"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Integrating LLM APIs into product features",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The fitcheck application integrates AI SDKs like Anthropic and Google to power automated evidence gathering and CV parsing."
+        }
+      ],
+      "toolCalls": 16,
+      "ms": 37292
+    },
+    {
+      "job": "02-frontend-hybrid-london",
+      "rows": [
+        {
+          "requirement": "2–4 years of commercial React experience",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The CV states 3+ years of experience building web applications with React.js and Next.js."
+        },
+        {
+          "requirement": "TypeScript",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "TypeScript is listed in the CV skills and used extensively in the fitcheck repository."
+        },
+        {
+          "requirement": "HTML and CSS, including responsive layouts",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "HTML5, CSS3, and Responsive Design are listed under frontend skills in the CV."
+        },
+        {
+          "requirement": "Web accessibility (WCAG 2.1 AA)",
+          "expect": ["gap", "partial"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Consuming GraphQL or REST APIs",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The CV details experience delivering features using REST and GraphQL APIs for client products."
+        },
+        {
+          "requirement": "Right to work in the UK",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Tailwind CSS",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "Tailwind CSS is listed in the CV skills and included in package.json for the fitcheck repository."
+        },
+        {
+          "requirement": "React Testing Library",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "React Testing Library is listed in the CV testing skills and referenced in project descriptions."
+        }
+      ],
+      "toolCalls": 13,
+      "ms": 52091
+    },
+    {
+      "job": "03-ai-engineer-remote-americas",
+      "error": "Failed after 5 attempts. Last error: AI_APICallError: This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."
+    },
+    {
+      "job": "08-freelance-react-native",
+      "rows": [
+        {
+          "requirement": "2+ years building mobile apps with React Native",
+          "expect": ["gap", "partial"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Experience with Expo",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Good TypeScript",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "Candidate has extensive TypeScript experience listed in their CV and used across projects like Next.js."
+        },
+        {
+          "requirement": "Publishing apps to the App Store and Google Play",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Firebase Auth and Firestore",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "In-app purchases with RevenueCat",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        }
+      ],
+      "toolCalls": 10,
+      "ms": 50464
+    },
+    {
+      "job": "10-django-react-south-asia",
+      "rows": [
+        {
+          "requirement": "Python and Django, including Django REST Framework",
+          "expect": ["partial", "met"],
+          "got": "partial",
+          "verdict": "correct",
+          "proof": "Django is listed in skills and used in the E-Prep project, but Django REST Framework is not explicitly named."
+        },
+        {
+          "requirement": "React with TypeScript",
+          "expect": ["met"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The candidate has professional experience and projects utilizing React, Next.js, and TypeScript."
+        },
+        {
+          "requirement": "PostgreSQL and data modelling",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "PostgreSQL is listed in skills and the repository includes a Prisma schema and migrations for database modeling."
+        },
+        {
+          "requirement": "Automated tests (pytest, Jest or similar)",
+          "expect": ["met", "partial"],
+          "got": "met",
+          "verdict": "correct",
+          "proof": "The candidate lists Jest and Playwright, and the repository contains numerous test files."
+        },
+        {
+          "requirement": "AWS (ECS, RDS, S3)",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Celery and Redis",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        },
+        {
+          "requirement": "Healthcare or regulated-industry experience",
+          "expect": ["gap"],
+          "got": "gap",
+          "verdict": "correct",
+          "proof": null
+        }
+      ],
+      "toolCalls": 10,
+      "ms": 6984
+    }
+  ]
+}

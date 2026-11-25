@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
-import { readInterview, readTailored } from "./saved-tailoring";
+import {
+  MAX_COVER_NOTE_CHARS,
+  readInterview,
+  readTailored,
+  withEditedCoverNote,
+} from "./saved-tailoring";
 
 const meta = {
   provider: "google",
@@ -32,6 +37,38 @@ describe("readTailored", () => {
         ms: 1,
       }),
     ).toBeNull();
+  });
+});
+
+describe("withEditedCoverNote", () => {
+  const saved = {
+    cvBullets: [{ text: "Led a 6-person team", unverified: [] }],
+    coverNote: { text: "Generated note", unverified: ["40%"] },
+    ...meta,
+  };
+  const now = new Date("2026-11-25T12:00:00.000Z");
+
+  test("replaces only the cover note and marks it edited", () => {
+    const next = withEditedCoverNote(saved, "  My own words.\r\n", [], now);
+    expect(next).toEqual({
+      ...saved,
+      coverNote: {
+        text: "My own words.",
+        unverified: [],
+        editedAt: "2026-11-25T12:00:00.000Z",
+      },
+    });
+    // Saved, then read back, it still parses.
+    expect(readTailored(next)).toEqual(next as never);
+  });
+
+  test("refuses empty or very long text", () => {
+    expect(withEditedCoverNote(saved, "   \n ", [], now)).toEqual({
+      error: "The cover note can't be empty.",
+    });
+    expect(
+      withEditedCoverNote(saved, "a".repeat(MAX_COVER_NOTE_CHARS + 1), [], now),
+    ).toHaveProperty("error");
   });
 });
 

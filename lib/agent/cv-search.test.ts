@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 
-import { chunkCv, searchCv, tokenize } from "./cv-search";
+import {
+  chunkCv,
+  indexCv,
+  searchChunks,
+  searchCv,
+  tokenize,
+} from "./cv-search";
 
 const CV = `JANE DOE
 Software Engineer · Lahore
@@ -103,5 +109,28 @@ describe("searchCv", () => {
 
   test("respects the limit", () => {
     expect(searchCv(CV, "React Next.js TypeScript", 2)).toHaveLength(2);
+  });
+});
+
+describe("indexCv and searchChunks", () => {
+  test("numbers chunks 0..n-1 in CV order", () => {
+    const indexed = indexCv(CV);
+    expect(indexed.map((c) => c.position)).toEqual(
+      chunkCv(CV).map((_, i) => i),
+    );
+    expect(indexed.map(({ section, text }) => ({ section, text }))).toEqual(
+      chunkCv(CV),
+    );
+  });
+
+  test("finds the same chunks as searchCv, with their positions", () => {
+    const chunks = indexCv(CV);
+    for (const query of ["Stripe", "Postgres", "Next.js TypeScript"]) {
+      const found = searchChunks(chunks, query);
+      expect(
+        found.map(({ section, text, score }) => ({ section, text, score })),
+      ).toEqual(searchCv(CV, query));
+      for (const m of found) expect(chunks[m.position].text).toBe(m.text);
+    }
   });
 });

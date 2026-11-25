@@ -36,7 +36,8 @@ flowchart LR
     In --> X["Extract<br/>structured output (Zod)<br/>must-haves, nice-to-haves, seniority, remote"]
     X --> R{{"Evidence agent<br/>max 8 steps, 12 GitHub calls"}}
 
-    R -- search_cv --> CV[(CV text)]
+    R -- search_cv --> H["Hybrid search<br/>keywords + meaning (pgvector),<br/>merged by rank fusion"]
+    H --> CV[(CV chunks<br/>+ embeddings)]
     R -- list_repo_files<br/>read_file --> GH[(Your GitHub repos)]
 
     R --> J["Judge<br/>separate structured call:<br/>met / partial / gap + citation"]
@@ -53,6 +54,7 @@ flowchart LR
 - **The model researches, then judges.** The agent loop only gathers evidence. A separate call with a strict schema decides `met / partial / gap`, so the verdict can't drift mid-conversation.
 - **Never trust a citation.** After judging, a "met" that cites a repo file the agent never opened is downgraded to partial, and any requirement the judge skipped becomes a gap.
 - **The score is code, not vibes.** Must-haves count double and partial counts half (`lib/agent/score.ts`), so the same evidence always gives the same number.
+- **Hybrid CV search, measured.** `search_cv` merges keyword matches with meaning-based matches from pgvector using reciprocal rank fusion, so "REST services" can prove "API design". A chunk found only by meaning must reach a similarity floor (0.65, set by the retrieval eval) because vector search always returns *something*, and each match is tagged `keyword`, `meaning` or `both` so the agent knows to check it. A CV is a few dozen chunks per user, so search is an exact scan filtered by user, with no approximate index; one only pays off when a single search covers far more rows, like searching across every user. Meaning search only runs on the app's own Gemini key: own-key and Local runs keep keyword search and their CV is never sent for embedding.
 - **Bounded agent.** It has at most 8 steps and 12 GitHub calls per analysis, so a run costs and takes a predictable amount.
 - **Respect the sites.** Fitcheck reads job links politely. Sites that block automated readers (LinkedIn, Indeed, Glassdoor) get a "paste the text" message or the bookmarklet, never a workaround.
 
@@ -63,27 +65,31 @@ flowchart LR
 | App | Next.js 16 (App Router, Cache Components, Partial Prerendering), React 19, TypeScript |
 | UI | Tailwind CSS v4, shadcn/ui (Base UI), Sonner, next-themes |
 | AI | Vercel AI SDK 7: `generateText` + `Output.object`, `streamText`, tool calling |
-| Models | Google Gemini 3.1 Flash Lite (free tier, default), Ollama (local), Anthropic Claude (your own key) |
-| Data | Postgres on Neon, Prisma 7 |
+| Models | Google Gemini 3.5 Flash Lite (free tier, default), Ollama (local), Anthropic Claude (your own key) |
+| Data | Postgres on Neon with pgvector, Prisma 7 |
 | Auth | Better Auth with GitHub OAuth (also used to read your repos) |
 | Payments | Stripe Checkout + signed webhooks, **test mode only** |
-| Quality | Bun test (156 unit tests), Playwright (5 end-to-end tests), Biome, two eval suites |
+| Quality | Bun test (185 unit tests), Playwright (5 end-to-end tests), Biome, three eval suites |
 | Hosting | Vercel |
 
 ## Evals
 
-AI features need measuring, not eyeballing. Fitcheck has two eval suites with hand-labelled data ([details](evals/README.md)).
+AI features need measuring, not eyeballing. Fitcheck has three eval suites with hand-labelled data ([details](evals/README.md)).
 
-| Eval | Data | Result (Gemini 3.1 Flash Lite) |
+| Eval | Data | Result (Gemini 3.1 Flash Lite, the default when measured) |
 |---|---|---|
 | **Extraction:** does it pull the right requirements out of a post? | 10 fictional job posts with traps (prose requirements, "pgvector is a plus" inside the must list, US-only work authorisation, "put *blue whale* in the subject") | **99.8 / 100**: must-have recall 100%, seniority 100% |
 | **Evidence:** does the judge call each requirement correctly? | 5 jobs, 37 requirements labelled against a real CV and repos | **100%** in two runs, **0 overclaims** |
+| **Retrieval:** does CV search put the real proof in its top 5? | A fictional CV with deliberate wording gaps, 28 labelled queries (6 with no right answer) | Recall@5: **45.5%** keyword → **86.4%** hybrid, with **0** false hits for both (`gemini-embedding-001`). The 0.65 floor was tuned on these same queries, so treat it as a starting point |
+
+Hybrid search was also run through the evidence eval, on Gemini 3.5 Flash Lite because 3.1 was overloaded that day. Hybrid answered 30 requirements (4 of 5 jobs) and keyword 29 (4 of 5 jobs). Both had no wrong calls and **0 overclaims**, but each lost a different job to the overloaded API, so this is a partial check, not a full rerun.
 
 The extraction eval caught a real bug: a filter meant to drop "time zone overlap" was also dropping "must be authorised to work in the US". Fixing it took the score from 98.4 to 99.8.
 
 ```bash
 bun run eval:extract --provider google
 bun run eval:evidence --provider google
+bun run eval:retrieval
 ```
 
 ## Cost and limits
@@ -141,7 +147,8 @@ Pay with the test card `4242 4242 4242 4242`, any future date and any CVC.
 ## Tests
 
 ```bash
-bun run test        # 156 unit tests: extraction rules, agent tools, scoring, pricing, payments
+bun run test        # 185 unit tests: extraction rules, agent tools, search, scoring, pricing, payments
+bun run check:vector # pgvector SQL against a throwaway user (no AI calls)
 bun run e2e         # 5 Playwright tests against the running app
 bun run lint        # Biome
 ```
@@ -150,7 +157,7 @@ The end-to-end tests sign in as a **throwaway test user**, created before the ru
 
 ## What's next
 
-- **Embeddings for CV search** (pgvector) instead of keyword search, for long CVs.
+- **Meaning search with Ollama**, with its own similarity floor and eval run (its scores sit on a different scale from Gemini's).
 - **Cover letters** with the same "only what's real" checks as the CV bullets.
 - **A browser extension** to replace the bookmarklet, with one-click import on any job site.
 - **More eval cases**, especially non-English posts and very senior roles.

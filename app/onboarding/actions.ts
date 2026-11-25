@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { aiChoiceFrom } from "@/lib/ai-choice";
+import { saveCvChunks } from "@/lib/cv-chunks";
 import { CvError, readCvPdf } from "@/lib/cv-pdf";
 import { db } from "@/lib/db";
 import { GitHubError, listPublicRepos } from "@/lib/github";
@@ -37,6 +38,14 @@ export async function uploadCv(
       },
       update: { cvText: cv.text, cvFileName: cv.fileName, cvPages: cv.pages },
     });
+    // Searchable chunks for the new CV. A failure here doesn't fail the
+    // upload: the next analysis syncs the chunks with the saved CV.
+    await saveCvChunks(session.user.id, cv.text).catch((error) =>
+      console.error(
+        "[uploadCv] couldn't save CV chunks",
+        error instanceof Error ? error.message : error,
+      ),
+    );
   } catch (error) {
     if (error instanceof CvError) return { error: error.message };
     console.error("[uploadCv]", error);

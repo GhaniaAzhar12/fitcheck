@@ -15,6 +15,7 @@ import {
   JudgedEvidenceList,
   type ToolCallLog,
 } from "./evidence";
+import type { CvSearcher } from "./hybrid-search";
 import type { RepoApi } from "./repo-files";
 import { createEvidenceTools } from "./tools";
 
@@ -254,6 +255,8 @@ export type FindEvidenceResult = {
 export async function findEvidence(options: {
   job: JobExtraction;
   cvText: string;
+  /** Defaults to keyword search over cvText. */
+  searchCv?: CvSearcher;
   repos: string[];
   github: RepoApi;
   modelOptions?: Parameters<typeof getModel>[0];
@@ -280,7 +283,12 @@ export async function findEvidence(options: {
 
   const log = new Map<string, ToolCallLog>();
   const tools = withLogging(
-    createEvidenceTools({ cvText, repos, github }),
+    createEvidenceTools({
+      cvText,
+      repos,
+      github,
+      searchCv: options.searchCv,
+    }),
     log,
     options.onToolCall,
   );

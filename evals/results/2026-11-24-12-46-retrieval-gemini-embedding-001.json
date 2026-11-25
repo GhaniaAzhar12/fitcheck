@@ -1,0 +1,811 @@
+{
+  "model": "gemini-embedding-001",
+  "chunks": 26,
+  "queries": 28,
+  "floor": 0.65,
+  "rows": {
+    "keyword": {
+      "recallAt5": 0.45454545454545453,
+      "mrr": 0.4636363636363636,
+      "falseHitRate": 0
+    },
+    "vector (no floor)": {
+      "recallAt5": 0.9772727272727273,
+      "mrr": 0.9772727272727273,
+      "falseHitRate": 1
+    },
+    "hybrid, floor 0.5": {
+      "recallAt5": 1,
+      "mrr": 0.9242424242424242,
+      "falseHitRate": 1
+    },
+    "hybrid, floor 0.55": {
+      "recallAt5": 1,
+      "mrr": 0.9242424242424242,
+      "falseHitRate": 1
+    },
+    "hybrid, floor 0.6": {
+      "recallAt5": 1,
+      "mrr": 0.9242424242424242,
+      "falseHitRate": 0.5
+    },
+    "hybrid, floor 0.65": {
+      "recallAt5": 0.8636363636363636,
+      "mrr": 0.8106060606060606,
+      "falseHitRate": 0
+    },
+    "hybrid, floor 0.7": {
+      "recallAt5": 0.5909090909090909,
+      "mrr": 0.6060606060606061,
+      "falseHitRate": 0
+    },
+    "hybrid, floor 0.75": {
+      "recallAt5": 0.45454545454545453,
+      "mrr": 0.46969696969696967,
+      "falseHitRate": 0
+    },
+    "hybrid, floor 0.8": {
+      "recallAt5": 0.45454545454545453,
+      "mrr": 0.46969696969696967,
+      "falseHitRate": 0
+    }
+  },
+  "perQuery": [
+    {
+      "query": "API design",
+      "keyword": [5, 21],
+      "vectorTop": [
+        {
+          "position": 3,
+          "similarity": 0.675
+        },
+        {
+          "position": 21,
+          "similarity": 0.631
+        },
+        {
+          "position": 22,
+          "similarity": 0.603
+        },
+        {
+          "position": 23,
+          "similarity": 0.602
+        },
+        {
+          "position": 9,
+          "similarity": 0.599
+        }
+      ],
+      "hybrid": [21, 5, 3]
+    },
+    {
+      "query": "Mentoring engineers",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 4,
+          "similarity": 0.717
+        },
+        {
+          "position": 5,
+          "similarity": 0.649
+        },
+        {
+          "position": 11,
+          "similarity": 0.643
+        },
+        {
+          "position": 1,
+          "similarity": 0.638
+        },
+        {
+          "position": 2,
+          "similarity": 0.614
+        }
+      ],
+      "hybrid": [4]
+    },
+    {
+      "query": "Leading a team",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 5,
+          "similarity": 0.646
+        },
+        {
+          "position": 4,
+          "similarity": 0.645
+        },
+        {
+          "position": 23,
+          "similarity": 0.593
+        },
+        {
+          "position": 14,
+          "similarity": 0.587
+        },
+        {
+          "position": 10,
+          "similarity": 0.583
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Stripe or another payments provider",
+      "keyword": [6],
+      "vectorTop": [
+        {
+          "position": 6,
+          "similarity": 0.656
+        },
+        {
+          "position": 16,
+          "similarity": 0.58
+        },
+        {
+          "position": 13,
+          "similarity": 0.575
+        },
+        {
+          "position": 12,
+          "similarity": 0.571
+        },
+        {
+          "position": 10,
+          "similarity": 0.563
+        }
+      ],
+      "hybrid": [6]
+    },
+    {
+      "query": "Server-side rendering",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 7,
+          "similarity": 0.694
+        },
+        {
+          "position": 12,
+          "similarity": 0.67
+        },
+        {
+          "position": 15,
+          "similarity": 0.639
+        },
+        {
+          "position": 19,
+          "similarity": 0.635
+        },
+        {
+          "position": 24,
+          "similarity": 0.632
+        }
+      ],
+      "hybrid": [7, 12]
+    },
+    {
+      "query": "PostgreSQL query performance",
+      "keyword": [8, 24],
+      "vectorTop": [
+        {
+          "position": 8,
+          "similarity": 0.726
+        },
+        {
+          "position": 15,
+          "similarity": 0.587
+        },
+        {
+          "position": 24,
+          "similarity": 0.582
+        },
+        {
+          "position": 14,
+          "similarity": 0.582
+        },
+        {
+          "position": 7,
+          "similarity": 0.573
+        }
+      ],
+      "hybrid": [8, 24]
+    },
+    {
+      "query": "Observability and monitoring",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 9,
+          "similarity": 0.69
+        },
+        {
+          "position": 10,
+          "similarity": 0.609
+        },
+        {
+          "position": 7,
+          "similarity": 0.604
+        },
+        {
+          "position": 13,
+          "similarity": 0.598
+        },
+        {
+          "position": 3,
+          "similarity": 0.594
+        }
+      ],
+      "hybrid": [9]
+    },
+    {
+      "query": "Docker",
+      "keyword": [24],
+      "vectorTop": [
+        {
+          "position": 10,
+          "similarity": 0.668
+        },
+        {
+          "position": 13,
+          "similarity": 0.624
+        },
+        {
+          "position": 3,
+          "similarity": 0.622
+        },
+        {
+          "position": 14,
+          "similarity": 0.618
+        },
+        {
+          "position": 7,
+          "similarity": 0.607
+        }
+      ],
+      "hybrid": [24, 10]
+    },
+    {
+      "query": "Next.js",
+      "keyword": [12, 24],
+      "vectorTop": [
+        {
+          "position": 12,
+          "similarity": 0.71
+        },
+        {
+          "position": 24,
+          "similarity": 0.674
+        },
+        {
+          "position": 15,
+          "similarity": 0.653
+        },
+        {
+          "position": 19,
+          "similarity": 0.642
+        },
+        {
+          "position": 7,
+          "similarity": 0.639
+        }
+      ],
+      "hybrid": [12, 24, 15]
+    },
+    {
+      "query": "End-to-end testing",
+      "keyword": [13],
+      "vectorTop": [
+        {
+          "position": 13,
+          "similarity": 0.712
+        },
+        {
+          "position": 24,
+          "similarity": 0.635
+        },
+        {
+          "position": 16,
+          "similarity": 0.623
+        },
+        {
+          "position": 9,
+          "similarity": 0.609
+        },
+        {
+          "position": 1,
+          "similarity": 0.604
+        }
+      ],
+      "hybrid": [13]
+    },
+    {
+      "query": "CI/CD pipelines",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 10,
+          "similarity": 0.655
+        },
+        {
+          "position": 13,
+          "similarity": 0.633
+        },
+        {
+          "position": 24,
+          "similarity": 0.612
+        },
+        {
+          "position": 4,
+          "similarity": 0.597
+        },
+        {
+          "position": 14,
+          "similarity": 0.596
+        }
+      ],
+      "hybrid": [10]
+    },
+    {
+      "query": "Integrating data between systems",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 14,
+          "similarity": 0.647
+        },
+        {
+          "position": 3,
+          "similarity": 0.635
+        },
+        {
+          "position": 9,
+          "similarity": 0.611
+        },
+        {
+          "position": 23,
+          "similarity": 0.603
+        },
+        {
+          "position": 10,
+          "similarity": 0.599
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Frontend performance optimisation",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 15,
+          "similarity": 0.712
+        },
+        {
+          "position": 12,
+          "similarity": 0.653
+        },
+        {
+          "position": 7,
+          "similarity": 0.642
+        },
+        {
+          "position": 8,
+          "similarity": 0.633
+        },
+        {
+          "position": 6,
+          "similarity": 0.623
+        }
+      ],
+      "hybrid": [15, 12]
+    },
+    {
+      "query": "Accessibility",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 16,
+          "similarity": 0.689
+        },
+        {
+          "position": 13,
+          "similarity": 0.597
+        },
+        {
+          "position": 22,
+          "similarity": 0.589
+        },
+        {
+          "position": 6,
+          "similarity": 0.582
+        },
+        {
+          "position": 19,
+          "similarity": 0.578
+        }
+      ],
+      "hybrid": [16]
+    },
+    {
+      "query": "Internationalisation (i18n)",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 17,
+          "similarity": 0.702
+        },
+        {
+          "position": 20,
+          "similarity": 0.612
+        },
+        {
+          "position": 15,
+          "similarity": 0.608
+        },
+        {
+          "position": 12,
+          "similarity": 0.603
+        },
+        {
+          "position": 13,
+          "similarity": 0.6
+        }
+      ],
+      "hybrid": [17]
+    },
+    {
+      "query": "Integrating LLM APIs into product features",
+      "keyword": [5, 12, 17, 19, 23],
+      "vectorTop": [
+        {
+          "position": 23,
+          "similarity": 0.687
+        },
+        {
+          "position": 21,
+          "similarity": 0.66
+        },
+        {
+          "position": 1,
+          "similarity": 0.616
+        },
+        {
+          "position": 4,
+          "similarity": 0.614
+        },
+        {
+          "position": 5,
+          "similarity": 0.605
+        }
+      ],
+      "hybrid": [5, 23, 12, 21, 17]
+    },
+    {
+      "query": "Open-source contributions",
+      "keyword": [22],
+      "vectorTop": [
+        {
+          "position": 22,
+          "similarity": 0.761
+        },
+        {
+          "position": 13,
+          "similarity": 0.663
+        },
+        {
+          "position": 20,
+          "similarity": 0.661
+        },
+        {
+          "position": 4,
+          "similarity": 0.648
+        },
+        {
+          "position": 14,
+          "similarity": 0.639
+        }
+      ],
+      "hybrid": [22, 13, 20]
+    },
+    {
+      "query": "Turning designs into UI",
+      "keyword": [19, 17],
+      "vectorTop": [
+        {
+          "position": 19,
+          "similarity": 0.722
+        },
+        {
+          "position": 7,
+          "similarity": 0.624
+        },
+        {
+          "position": 5,
+          "similarity": 0.622
+        },
+        {
+          "position": 24,
+          "similarity": 0.616
+        },
+        {
+          "position": 15,
+          "similarity": 0.61
+        }
+      ],
+      "hybrid": [19, 17]
+    },
+    {
+      "query": "Agile sprint planning",
+      "keyword": [5],
+      "vectorTop": [
+        {
+          "position": 5,
+          "similarity": 0.69
+        },
+        {
+          "position": 4,
+          "similarity": 0.574
+        },
+        {
+          "position": 13,
+          "similarity": 0.571
+        },
+        {
+          "position": 1,
+          "similarity": 0.57
+        },
+        {
+          "position": 3,
+          "similarity": 0.569
+        }
+      ],
+      "hybrid": [5]
+    },
+    {
+      "query": "Real-time updates",
+      "keyword": [7],
+      "vectorTop": [
+        {
+          "position": 7,
+          "similarity": 0.672
+        },
+        {
+          "position": 13,
+          "similarity": 0.628
+        },
+        {
+          "position": 12,
+          "similarity": 0.62
+        },
+        {
+          "position": 14,
+          "similarity": 0.613
+        },
+        {
+          "position": 9,
+          "similarity": 0.613
+        }
+      ],
+      "hybrid": [7]
+    },
+    {
+      "query": "Caching with Redis",
+      "keyword": [24],
+      "vectorTop": [
+        {
+          "position": 24,
+          "similarity": 0.625
+        },
+        {
+          "position": 12,
+          "similarity": 0.609
+        },
+        {
+          "position": 6,
+          "similarity": 0.6
+        },
+        {
+          "position": 15,
+          "similarity": 0.6
+        },
+        {
+          "position": 7,
+          "similarity": 0.599
+        }
+      ],
+      "hybrid": [24]
+    },
+    {
+      "query": "Improving conversion rates",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 6,
+          "similarity": 0.684
+        },
+        {
+          "position": 15,
+          "similarity": 0.629
+        },
+        {
+          "position": 19,
+          "similarity": 0.627
+        },
+        {
+          "position": 16,
+          "similarity": 0.619
+        },
+        {
+          "position": 12,
+          "similarity": 0.612
+        }
+      ],
+      "hybrid": [6]
+    },
+    {
+      "query": "iOS development with Swift",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 18,
+          "similarity": 0.611
+        },
+        {
+          "position": 4,
+          "similarity": 0.596
+        },
+        {
+          "position": 19,
+          "similarity": 0.588
+        },
+        {
+          "position": 5,
+          "similarity": 0.586
+        },
+        {
+          "position": 20,
+          "similarity": 0.586
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Embedded C firmware",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 20,
+          "similarity": 0.612
+        },
+        {
+          "position": 19,
+          "similarity": 0.602
+        },
+        {
+          "position": 4,
+          "similarity": 0.601
+        },
+        {
+          "position": 14,
+          "similarity": 0.597
+        },
+        {
+          "position": 10,
+          "similarity": 0.595
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "SAP ERP configuration",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 14,
+          "similarity": 0.574
+        },
+        {
+          "position": 17,
+          "similarity": 0.573
+        },
+        {
+          "position": 9,
+          "similarity": 0.571
+        },
+        {
+          "position": 3,
+          "similarity": 0.564
+        },
+        {
+          "position": 19,
+          "similarity": 0.562
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Rust systems programming",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 20,
+          "similarity": 0.593
+        },
+        {
+          "position": 11,
+          "similarity": 0.589
+        },
+        {
+          "position": 14,
+          "similarity": 0.587
+        },
+        {
+          "position": 4,
+          "similarity": 0.587
+        },
+        {
+          "position": 3,
+          "similarity": 0.584
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Salesforce administration",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 4,
+          "similarity": 0.595
+        },
+        {
+          "position": 7,
+          "similarity": 0.581
+        },
+        {
+          "position": 9,
+          "similarity": 0.581
+        },
+        {
+          "position": 13,
+          "similarity": 0.579
+        },
+        {
+          "position": 5,
+          "similarity": 0.578
+        }
+      ],
+      "hybrid": []
+    },
+    {
+      "query": "Mobile apps in Flutter",
+      "keyword": [],
+      "vectorTop": [
+        {
+          "position": 19,
+          "similarity": 0.607
+        },
+        {
+          "position": 18,
+          "similarity": 0.595
+        },
+        {
+          "position": 20,
+          "similarity": 0.595
+        },
+        {
+          "position": 21,
+          "similarity": 0.589
+        },
+        {
+          "position": 13,
+          "similarity": 0.588
+        }
+      ],
+      "hybrid": []
+    }
+  ]
+}

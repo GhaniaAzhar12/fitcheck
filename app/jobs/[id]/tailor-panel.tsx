@@ -8,17 +8,9 @@ import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 
 import type { Tailored } from "@/lib/tailor";
 
+import { CoverNoteEditor } from "./cover-note-editor";
 import { type TailorState, tailorApplication } from "./tailor-actions";
-
-function Unverified({ numbers }: { numbers: string[] }) {
-  if (!numbers.length) return null;
-  return (
-    <p className="text-xs text-partial">
-      Check: {numbers.join(", ")} {numbers.length === 1 ? "isn't" : "aren't"} in
-      your CV. Edit or remove before using.
-    </p>
-  );
-}
+import { Unverified } from "./unverified-numbers";
 
 export function TailorPanel({
   analysisId,
@@ -35,6 +27,8 @@ export function TailorPanel({
   // The model choice saved in setup (key stays in this browser).
   const [aiFields, setAiFields] = useState<Record<string, string>>({});
   useEffect(() => setAiFields(aiFormFields(loadAiSettings())), []);
+  // Set by the cover note editor; Regenerate would replace an edited note.
+  const [noteEdited, setNoteEdited] = useState(false);
 
   const result = state.result;
   const allBullets =
@@ -42,7 +36,20 @@ export function TailorPanel({
 
   return (
     <div className="flex flex-col gap-5">
-      <form action={formAction} className="flex flex-wrap items-center gap-3">
+      <form
+        action={formAction}
+        onSubmit={(e) => {
+          if (
+            noteEdited &&
+            !window.confirm(
+              "Regenerating replaces your edited cover note. Continue?",
+            )
+          ) {
+            e.preventDefault();
+          }
+        }}
+        className="flex flex-wrap items-center gap-3"
+      >
         <input type="hidden" name="analysisId" value={analysisId} />
         {Object.entries(aiFields).map(([name, value]) => (
           <input key={name} type="hidden" name={name} value={value} />
@@ -95,21 +102,13 @@ export function TailorPanel({
             </ul>
           </section>
 
-          <section
-            aria-labelledby="note-heading"
-            className="flex flex-col gap-2"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h3 id="note-heading" className="font-semibold">
-                Cover note
-              </h3>
-              <CopyButton text={result.coverNote.text} />
-            </div>
-            <div className="whitespace-pre-wrap rounded-lg border bg-muted/40 p-4 text-sm leading-relaxed">
-              {result.coverNote.text}
-            </div>
-            <Unverified numbers={result.coverNote.unverified} />
-          </section>
+          <CoverNoteEditor
+            // A regenerated note starts a fresh editor.
+            key={result.generatedAt}
+            analysisId={analysisId}
+            initial={result.coverNote}
+            onHasEditsChange={setNoteEdited}
+          />
 
           <p className="text-xs text-muted-foreground">
             Written only from your CV and the evidence found. {result.provider}/

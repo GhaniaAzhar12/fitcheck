@@ -1,7 +1,7 @@
 import { tool } from "ai";
 import { z } from "zod";
 
-import { searchCv } from "./cv-search";
+import { type CvSearcher, keywordSearcher } from "./hybrid-search";
 import {
   MAX_LINES,
   normalizePath,
@@ -15,6 +15,8 @@ export type EvidenceToolsOptions = {
   /** The user's chosen evidence repos, "owner/name". Nothing else is readable. */
   repos: string[];
   github: RepoApi;
+  /** Defaults to keyword search over cvText. */
+  searchCv?: CvSearcher;
 };
 
 /**
@@ -25,6 +27,7 @@ export function createEvidenceTools({
   cvText,
   repos,
   github,
+  searchCv = keywordSearcher(cvText),
 }: EvidenceToolsOptions) {
   // One file listing per repo per run.
   const fileLists = new Map<
@@ -60,8 +63,7 @@ export function createEvidenceTools({
 
   return {
     search_cv: tool({
-      description:
-        "Search the user's CV for lines about a skill, technology or experience. Returns the best-matching bullets with their CV section.",
+      description: `Search the user's CV for lines about a skill, technology or experience. Returns the best-matching CV lines with their section. matchedBy "meaning" means related wording found by meaning, not the same words: check it really proves the requirement before relying on it.`,
       inputSchema: z.object({
         query: z
           .string()
@@ -72,7 +74,7 @@ export function createEvidenceTools({
           ),
       }),
       execute: async ({ query }) => {
-        const matches = searchCv(cvText, query);
+        const matches = await searchCv(query);
         return matches.length
           ? { matches }
           : { matches: [], note: `Nothing in the CV mentions "${query}".` };

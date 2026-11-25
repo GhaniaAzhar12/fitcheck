@@ -57,6 +57,31 @@ describe("search_cv", () => {
     expect(result.matches[0]?.text).toContain("Stripe checkout");
   });
 
+  test("tags keyword matches by default", async () => {
+    const { tools } = setup();
+    const result = (await run(tools.search_cv, { query: "Stripe" })) as {
+      matches: { matchedBy: string }[];
+    };
+    expect(result.matches[0]?.matchedBy).toBe("keyword");
+  });
+
+  test("uses an injected searcher", async () => {
+    const match = {
+      section: "EXPERIENCE",
+      text: "Designed the public API for the shop",
+      matchedBy: "meaning" as const,
+    };
+    const tools = createEvidenceTools({
+      cvText: "",
+      repos: ["jane/shop"],
+      github: fakeGitHub(FILES).api,
+      searchCv: async () => [match],
+    });
+    expect(await run(tools.search_cv, { query: "API design" })).toEqual({
+      matches: [match],
+    });
+  });
+
   test("says so when nothing matches", async () => {
     const { tools } = setup();
     expect(await run(tools.search_cv, { query: "Kubernetes" })).toEqual({

@@ -10,11 +10,68 @@ import {
   type InterviewPrep,
 } from "@/lib/interview-prep";
 import { JobExtraction } from "@/lib/job-extraction";
+import { readTailored, withEditedCoverNote } from "@/lib/saved-tailoring";
 import { getSession } from "@/lib/session";
-import { generateTailored, type Tailored } from "@/lib/tailor";
+import { generateTailored, type Tailored, tailorSources } from "@/lib/tailor";
+import { unverifiedNumbers } from "@/lib/tailor-check";
 import { recordUsage } from "@/lib/usage";
 
 export type TailorState = { error?: string; result?: Tailored };
+
+export type SaveCoverNoteResult =
+  | { ok: true; text: string; unverified: string[]; editedAt: string }
+  | { ok: false; error: string };
+
+/**
+ * Saves the person's edit of the cover note, so the copy and the PDF/Word
+ * downloads use it. Numbers are re-checked against the CV and evidence, so
+ * a typed-in "50%" that isn't in the CV is still flagged. No model call.
+ */
+export async function saveCoverNote(
+  analysisId: string,
+  text: string,
+): Promise<SaveCoverNoteResult> {
+  const session = await getSession();
+  if (!session)
+    return { ok: false, error: "Your session ended. Sign in again." };
+
+  // Only analyses of the signed-in user's own jobs.
+  const analysis = await db.analysis.findFirst({
+    where: { id: analysisId, status: "DONE", job: { userId: session.user.id } },
+    select: { tailored: true, evidence: true },
+  });
+  const saved = analysis ? readTailored(analysis.tailored) : null;
+  if (!analysis || !saved) {
+    return { ok: false, error: "Write the tailored text first." };
+  }
+
+  const profile = await db.profile.findUnique({
+    where: { userId: session.user.id },
+    select: { cvText: true },
+  });
+  const sources = tailorSources(
+    profile?.cvText ?? "",
+    (analysis.evidence ?? []) as Evidence[],
+  );
+  const next = withEditedCoverNote(
+    saved,
+    text,
+    unverifiedNumbers(text, sources),
+    new Date(),
+  );
+  if ("error" in next) return { ok: false, error: next.error };
+
+  await db.analysis.update({
+    where: { id: analysisId },
+    data: { tailored: next as unknown as Prisma.InputJsonValue },
+  });
+  return {
+    ok: true,
+    text: next.coverNote.text,
+    unverified: next.coverNote.unverified,
+    editedAt: next.coverNote.editedAt ?? new Date().toISOString(),
+  };
+}
 
 export async function tailorApplication(
   _prev: TailorState,

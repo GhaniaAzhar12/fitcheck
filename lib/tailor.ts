@@ -53,6 +53,11 @@ function evidenceNotes(evidence: Evidence[]) {
     .join("\n");
 }
 
+/** What any number in tailored text must trace back to: the CV and evidence. */
+export function tailorSources(cvText: string, evidence: Evidence[]): string {
+  return `${cvText}\n${evidenceNotes(evidence)}`;
+}
+
 export async function generateTailored({
   job,
   evidence,
@@ -88,7 +93,7 @@ export async function generateTailored({
   });
 
   // Anything numeric must trace back to the CV or the evidence.
-  const sources = `${cvText}\n${notes}`;
+  const sources = tailorSources(cvText, evidence);
   return {
     cvBullets: output.cvBullets.map((text) => ({
       text: text.trim(),

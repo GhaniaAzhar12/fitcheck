@@ -17,7 +17,8 @@ const Meta = {
 
 export const SavedTailored = z.object({
   cvBullets: z.array(Checked),
-  coverNote: Checked,
+  // editedAt is set once the person has changed the generated note.
+  coverNote: Checked.extend({ editedAt: z.string().optional() }),
   ...Meta,
 });
 export type SavedTailored = z.infer<typeof SavedTailored>;
@@ -40,6 +41,31 @@ export type SavedInterview = z.infer<typeof SavedInterview>;
 export function readTailored(value: unknown): SavedTailored | null {
   const parsed = SavedTailored.safeParse(value);
   return parsed.success ? parsed.data : null;
+}
+
+export const MAX_COVER_NOTE_CHARS = 5_000;
+
+/**
+ * The saved tailoring with the cover note replaced by the person's edit.
+ * Returns an error message instead when the text can't be saved.
+ */
+export function withEditedCoverNote(
+  saved: SavedTailored,
+  text: string,
+  unverified: string[],
+  now: Date,
+): SavedTailored | { error: string } {
+  const trimmed = text.replace(/\r\n/g, "\n").trim();
+  if (!trimmed) return { error: "The cover note can't be empty." };
+  if (trimmed.length > MAX_COVER_NOTE_CHARS) {
+    return {
+      error: `Keep the cover note under ${MAX_COVER_NOTE_CHARS.toLocaleString("en-GB")} characters.`,
+    };
+  }
+  return {
+    ...saved,
+    coverNote: { text: trimmed, unverified, editedAt: now.toISOString() },
+  };
 }
 
 export function readInterview(value: unknown): SavedInterview | null {

@@ -3,6 +3,10 @@
 //
 //   bun run eval:evidence                    → default model
 //   bun run eval:evidence --provider google
+//   bun run eval:evidence --search keyword   → the old keyword-only CV search
+//
+// --search hybrid (the default) embeds the CV in memory with the app's
+// Gemini key, like a free-tier analysis; nothing is written to the database.
 //
 // Uses the first user's CV, repos and GitHub token from the database.
 // Results are saved to evals/results/<date>-evidence-<model>.json.
@@ -13,8 +17,18 @@ import { parseArgs } from "node:util";
 
 import { Octokit } from "@octokit/rest";
 
+import { cosineSimilarity } from "ai";
+
+import { indexCv } from "@/lib/agent/cv-search";
 import { findEvidence } from "@/lib/agent/find-evidence";
+import {
+  type CvSearcher,
+  createHybridSearcher,
+  keywordSearcher,
+  MEANING_FLOOR,
+} from "@/lib/agent/hybrid-search";
 import { octokitRepoApi } from "@/lib/agent/repo-files";
+import { embedDocuments, embedQuery } from "@/lib/cv-embeddings";
 import { db } from "@/lib/db";
 import {
   jobFor,
@@ -30,6 +44,7 @@ const { values: args } = parseArgs({
     provider: { type: "string" },
     model: { type: "string" },
     job: { type: "string" },
+    search: { type: "string", default: "hybrid" },
   },
 });
 if (
@@ -63,12 +78,40 @@ const github = octokitRepoApi(
   }),
 );
 
+if (args.search !== "hybrid" && args.search !== "keyword") {
+  throw new Error("--search must be hybrid or keyword");
+}
+const cvText = profile.cvText ?? "";
+
+/** Hybrid search over the real CV, with vectors kept in memory. */
+async function inMemoryHybrid(): Promise<CvSearcher> {
+  const chunks = indexCv(cvText);
+  const { vectors } = await embedDocuments(chunks.map((c) => c.text));
+  return createHybridSearcher({
+    chunks,
+    embedQuery: async (q) => (await embedQuery(q)).vector,
+    vectorSearch: async (v) =>
+      chunks
+        .map((c, i) => ({ ...c, similarity: cosineSimilarity(v, vectors[i]) }))
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, 10),
+    minSimilarity: MEANING_FLOOR,
+    onError: (e) =>
+      console.warn(
+        "  meaning search failed:",
+        e instanceof Error ? e.message : e,
+      ),
+  });
+}
+const searchCv =
+  args.search === "hybrid" ? await inMemoryHybrid() : keywordSearcher(cvText);
+
 const cases = (await loadEvidenceCases()).filter(
   (c) => !args.job || c.job.startsWith(args.job),
 );
 if (!cases.length) throw new Error(`No job matches "${args.job}".`);
 console.log(
-  `Evidence eval: ${cases.length} jobs with ${provider}/${modelId}\n`,
+  `Evidence eval: ${cases.length} jobs with ${provider}/${modelId}, ${args.search} CV search\n`,
 );
 
 const ICON = {
@@ -89,7 +132,8 @@ for (const c of cases) {
   try {
     const run = await findEvidence({
       job,
-      cvText: profile.cvText ?? "",
+      cvText,
+      searchCv,
       repos: profile.repos,
       github,
       modelOptions,
@@ -143,11 +187,11 @@ const dir = join(process.cwd(), "evals", "results");
 await mkdir(dir, { recursive: true });
 const file = join(
   dir,
-  `${stamp}-evidence-${provider}-${modelId.replace(/[^\w.-]/g, "_")}.json`,
+  `${stamp}-evidence-${provider}-${modelId.replace(/[^\w.-]/g, "_")}${args.search === "hybrid" ? "-hybrid" : ""}.json`,
 );
 await writeFile(
   file,
-  `${JSON.stringify({ ranAt: new Date().toISOString(), provider, modelId, summary, jobs: results }, null, 2)}\n`,
+  `${JSON.stringify({ ranAt: new Date().toISOString(), provider, modelId, search: args.search, floor: args.search === "hybrid" ? MEANING_FLOOR : null, summary, jobs: results }, null, 2)}\n`,
 );
 console.log(`Saved ${file.replace(`${process.cwd()}/`, "")}`);
 await db.$disconnect();

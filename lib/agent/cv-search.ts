@@ -3,6 +3,8 @@
 
 export type CvChunk = { section: string | null; text: string };
 export type CvMatch = CvChunk & { score: number };
+/** A chunk with its place in the CV (0-based), the id used to merge rankings. */
+export type IndexedChunk = CvChunk & { position: number };
 
 const BULLET = /^[-•*▪◦●–]\s*/;
 
@@ -128,16 +130,25 @@ export function tokenize(text: string): string[] {
     .map((t) => ALIASES[t] ?? t);
 }
 
+/** chunkCv, with each chunk's position in the CV. */
+export function indexCv(cvText: string): IndexedChunk[] {
+  return chunkCv(cvText).map((chunk, position) => ({ ...chunk, position }));
+}
+
 /**
- * Returns the CV chunks that best match a query, highest score first.
+ * Returns the chunks that best match a query, highest score first.
  * Score = distinct query words found, +2 if the whole phrase appears.
  */
-export function searchCv(cvText: string, query: string, limit = 5): CvMatch[] {
+export function searchChunks(
+  chunks: IndexedChunk[],
+  query: string,
+  limit = 5,
+): (IndexedChunk & { score: number })[] {
   const queryTokens = [...new Set(tokenize(query))];
   if (!queryTokens.length) return [];
   const phrase = query.trim().toLowerCase();
 
-  return chunkCv(cvText)
+  return chunks
     .map((chunk) => {
       const haystack = new Set(
         tokenize(`${chunk.section ?? ""} ${chunk.text}`),
@@ -155,4 +166,11 @@ export function searchCv(cvText: string, query: string, limit = 5): CvMatch[] {
     .filter((m) => m.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
+}
+
+/** Keyword search over CV text: the CV chunks that best match a query. */
+export function searchCv(cvText: string, query: string, limit = 5): CvMatch[] {
+  return searchChunks(indexCv(cvText), query, limit).map(
+    ({ section, text, score }) => ({ section, text, score }),
+  );
 }

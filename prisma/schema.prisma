@@ -11,19 +11,20 @@ datasource db {
 // ─── Better Auth tables (core schema) ────────────────────────────────────────
 
 model User {
-  id            String       @id
+  id            String        @id
   name          String
-  email         String       @unique
-  emailVerified Boolean      @default(false)
+  email         String        @unique
+  emailVerified Boolean       @default(false)
   image         String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   sessions      Session[]
   accounts      Account[]
   jobs          Job[]
   profile       Profile?
   usageEvents   UsageEvent[]
   creditEntries CreditEntry[]
+  cvChunks      CvChunk[]
 
   @@map("user")
 }
@@ -165,6 +166,8 @@ enum UsageKind {
   TAILOR
   INTERVIEW
   KEY_CHECK
+  /// Turning CV chunks or search queries into vectors (lib/cv-embeddings.ts)
+  EMBED
 }
 
 /// One AI model call: what it cost in tokens and time. Powers the cost
@@ -217,4 +220,25 @@ model CreditEntry {
 
   @@index([userId, createdAt])
   @@map("credit_entry")
+}
+
+/// One searchable piece of a user's CV (a bullet or paragraph), with its
+/// embedding for meaning-based search. Replaced whenever the CV is uploaded.
+/// Vectors are written with raw SQL (lib/cv-chunks.ts).
+model CvChunk {
+  id        String                      @id @default(cuid())
+  userId    String
+  user      User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Order in the CV, from 0.
+  position  Int
+  section   String?
+  text      String
+  /// Null until embedded, or when embedding failed.
+  embedding Unsupported("vector(768)")?
+  /// Which model made the vector, e.g. "google:gemini-embedding-001".
+  model     String?
+  createdAt DateTime                    @default(now())
+
+  @@index([userId])
+  @@map("cv_chunk")
 }
