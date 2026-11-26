@@ -19,6 +19,8 @@ export const SavedTailored = z.object({
   cvBullets: z.array(Checked),
   // editedAt is set once the person has changed the generated note.
   coverNote: Checked.extend({ editedAt: z.string().optional() }),
+  // The person's own CV, edited for this job. Absent until they save one.
+  cv: Checked.extend({ editedAt: z.string() }).optional(),
   ...Meta,
 });
 export type SavedTailored = z.infer<typeof SavedTailored>;
@@ -44,6 +46,22 @@ export function readTailored(value: unknown): SavedTailored | null {
 }
 
 export const MAX_COVER_NOTE_CHARS = 5_000;
+export const MAX_TAILORED_CV_CHARS = 20_000;
+
+function cleanEdit(
+  text: string,
+  max: number,
+  label: string,
+): { text: string } | { error: string } {
+  const trimmed = text.replace(/\r\n/g, "\n").trim();
+  if (!trimmed) return { error: `The ${label} can't be empty.` };
+  if (trimmed.length > max) {
+    return {
+      error: `Keep the ${label} under ${max.toLocaleString("en-GB")} characters.`,
+    };
+  }
+  return { text: trimmed };
+}
 
 /**
  * The saved tailoring with the cover note replaced by the person's edit.
@@ -55,16 +73,26 @@ export function withEditedCoverNote(
   unverified: string[],
   now: Date,
 ): SavedTailored | { error: string } {
-  const trimmed = text.replace(/\r\n/g, "\n").trim();
-  if (!trimmed) return { error: "The cover note can't be empty." };
-  if (trimmed.length > MAX_COVER_NOTE_CHARS) {
-    return {
-      error: `Keep the cover note under ${MAX_COVER_NOTE_CHARS.toLocaleString("en-GB")} characters.`,
-    };
-  }
+  const clean = cleanEdit(text, MAX_COVER_NOTE_CHARS, "cover note");
+  if ("error" in clean) return clean;
   return {
     ...saved,
-    coverNote: { text: trimmed, unverified, editedAt: now.toISOString() },
+    coverNote: { text: clean.text, unverified, editedAt: now.toISOString() },
+  };
+}
+
+/** The saved tailoring with the person's CV for this job set to their edit. */
+export function withEditedCv(
+  saved: SavedTailored,
+  text: string,
+  unverified: string[],
+  now: Date,
+): SavedTailored | { error: string } {
+  const clean = cleanEdit(text, MAX_TAILORED_CV_CHARS, "CV");
+  if ("error" in clean) return clean;
+  return {
+    ...saved,
+    cv: { text: clean.text, unverified, editedAt: now.toISOString() },
   };
 }
 

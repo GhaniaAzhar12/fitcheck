@@ -1,6 +1,8 @@
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { PDFDocument, type PDFFont, StandardFonts } from "pdf-lib";
 
+import { documentFileName, drawable, wrapText } from "./pdf-text";
+
 // Turns the saved cover note into a letter people can download as PDF or
 // Word. The note itself is only the body; this adds the sender, date,
 // recipient, greeting and sign-off around it, unless the note already has them.
@@ -114,22 +116,12 @@ export function letterParts(input: CoverLetterInput): LetterParts {
   };
 }
 
-/** "Cover letter - Acme - Senior Engineer", safe for any file system. */
 export function coverLetterFileName(
   company: string | null,
   jobTitle: string,
   ext: "pdf" | "docx",
 ): string {
-  const base = ["Cover letter", company, jobTitle]
-    .filter(Boolean)
-    .join(" - ")
-    .normalize("NFKD")
-    .replace(/[^\w .-]+/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 90)
-    .trim();
-  return `${base || "Cover letter"}.${ext}`;
+  return documentFileName("Cover letter", company, jobTitle, ext);
 }
 
 // ---------- PDF ----------
@@ -139,44 +131,8 @@ const MARGIN = 72;
 const SIZE = 11;
 const LEADING = 16;
 
-/** Swaps characters the standard PDF font can't draw for close ASCII. */
-function drawable(text: string, font: PDFFont): string {
-  const swaps: Record<string, string> = {
-    " ": " ",
-    "‐": "-",
-    "‑": "-",
-    "−": "-",
-    "→": "->",
-    "✓": "",
-  };
-  let out = "";
-  for (const ch of text) {
-    const swapped = swaps[ch] ?? ch;
-    try {
-      font.encodeText(swapped);
-      out += swapped;
-    } catch {
-      // Not in the font's character set (e.g. emoji): leave it out.
-    }
-  }
-  return out;
-}
-
-function wrap(text: string, font: PDFFont, maxWidth: number): string[] {
-  const lines: string[] = [];
-  let line = "";
-  for (const word of text.split(/\s+/).filter(Boolean)) {
-    const next = line ? `${line} ${word}` : word;
-    if (font.widthOfTextAtSize(next, SIZE) <= maxWidth || !line) {
-      line = next;
-    } else {
-      lines.push(line);
-      line = word;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
+const wrap = (text: string, font: PDFFont, maxWidth: number) =>
+  wrapText(text, font, SIZE, maxWidth);
 
 export async function coverLetterPdf(parts: LetterParts): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();

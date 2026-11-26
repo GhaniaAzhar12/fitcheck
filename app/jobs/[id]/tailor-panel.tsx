@@ -9,16 +9,20 @@ import { aiFormFields, loadAiSettings } from "@/lib/ai-settings";
 import type { Tailored } from "@/lib/tailor";
 
 import { CoverNoteEditor } from "./cover-note-editor";
+import { CvEditor } from "./cv-editor";
 import { type TailorState, tailorApplication } from "./tailor-actions";
 import { Unverified } from "./unverified-numbers";
 
 export function TailorPanel({
   analysisId,
   saved,
+  cv,
 }: {
   analysisId: string;
   /** Previously generated text, so a reload costs no model call. */
   saved: Tailored | null;
+  /** The CV from Set up, raw and tidied, for the per-job CV editor. */
+  cv: { original: string; starting: string } | null;
 }) {
   const [state, formAction, pending] = useActionState<TailorState, FormData>(
     tailorApplication,
@@ -109,6 +113,15 @@ export function TailorPanel({
             initial={result.coverNote}
             onHasEditsChange={setNoteEdited}
           />
+
+          {cv ? (
+            <CvEditor
+              analysisId={analysisId}
+              original={cv.original}
+              starting={cv.starting}
+              initial={result.cv}
+            />
+          ) : null}
 
           <p className="text-xs text-muted-foreground">
             Written only from your CV and the evidence found. {result.provider}/

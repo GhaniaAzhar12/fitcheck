@@ -2,9 +2,11 @@ import { describe, expect, test } from "bun:test";
 
 import {
   MAX_COVER_NOTE_CHARS,
+  MAX_TAILORED_CV_CHARS,
   readInterview,
   readTailored,
   withEditedCoverNote,
+  withEditedCv,
 } from "./saved-tailoring";
 
 const meta = {
@@ -68,6 +70,37 @@ describe("withEditedCoverNote", () => {
     });
     expect(
       withEditedCoverNote(saved, "a".repeat(MAX_COVER_NOTE_CHARS + 1), [], now),
+    ).toHaveProperty("error");
+  });
+});
+
+describe("withEditedCv", () => {
+  const saved = {
+    cvBullets: [],
+    coverNote: { text: "Note", unverified: [] },
+    ...meta,
+  };
+  const now = new Date("2026-11-26T09:00:00.000Z");
+
+  test("adds the edited CV and keeps everything else", () => {
+    const next = withEditedCv(saved, "JANE DOE\r\n• Built X\n", ["50%"], now);
+    expect(next).toEqual({
+      ...saved,
+      cv: {
+        text: "JANE DOE\n• Built X",
+        unverified: ["50%"],
+        editedAt: "2026-11-26T09:00:00.000Z",
+      },
+    });
+    expect(readTailored(next)).toEqual(next as never);
+  });
+
+  test("refuses empty or very long text", () => {
+    expect(withEditedCv(saved, "  ", [], now)).toEqual({
+      error: "The CV can't be empty.",
+    });
+    expect(
+      withEditedCv(saved, "a".repeat(MAX_TAILORED_CV_CHARS + 1), [], now),
     ).toHaveProperty("error");
   });
 });

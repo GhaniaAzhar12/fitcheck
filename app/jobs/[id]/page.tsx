@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { tidyCv } from "@/lib/cv-text";
 import { db } from "@/lib/db";
 import { JobExtraction } from "@/lib/job-extraction";
 import { readInterview, readTailored } from "@/lib/saved-tailoring";
@@ -170,7 +171,7 @@ async function JobDetails({
             </details>
           </>
         }
-        tailor={<TailorSection jobId={job.id} />}
+        tailor={<TailorSection jobId={job.id} userId={user.id} />}
       />
 
       <p className="text-xs text-muted-foreground">
@@ -186,12 +187,24 @@ async function JobDetails({
 }
 
 /** Tailoring uses the latest successful analysis for its evidence. */
-async function TailorSection({ jobId }: { jobId: string }) {
-  const analysis = await db.analysis.findFirst({
-    where: { jobId, status: "DONE" },
-    orderBy: { createdAt: "desc" },
-    select: { id: true, tailored: true, interview: true },
-  });
+async function TailorSection({
+  jobId,
+  userId,
+}: {
+  jobId: string;
+  userId: string;
+}) {
+  const [analysis, profile] = await Promise.all([
+    db.analysis.findFirst({
+      where: { jobId, status: "DONE" },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, tailored: true, interview: true },
+    }),
+    db.profile.findUnique({ where: { userId }, select: { cvText: true } }),
+  ]);
+  const cv = profile?.cvText
+    ? { original: profile.cvText, starting: tidyCv(profile.cvText) }
+    : null;
   // Saved results: shown as-is, no model call on reload.
   const savedTailored = readTailored(analysis?.tailored);
   const savedInterview = readInterview(analysis?.interview);
@@ -215,7 +228,11 @@ async function TailorSection({ jobId }: { jobId: string }) {
         </CardHeader>
         <CardContent>
           {analysis ? (
-            <TailorPanel analysisId={analysis.id} saved={savedTailored} />
+            <TailorPanel
+              analysisId={analysis.id}
+              saved={savedTailored}
+              cv={cv}
+            />
           ) : (
             needsAnalysis
           )}

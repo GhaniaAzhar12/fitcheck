@@ -10,7 +10,11 @@ import {
   type InterviewPrep,
 } from "@/lib/interview-prep";
 import { JobExtraction } from "@/lib/job-extraction";
-import { readTailored, withEditedCoverNote } from "@/lib/saved-tailoring";
+import {
+  readTailored,
+  withEditedCoverNote,
+  withEditedCv,
+} from "@/lib/saved-tailoring";
 import { getSession } from "@/lib/session";
 import { generateTailored, type Tailored, tailorSources } from "@/lib/tailor";
 import { unverifiedNumbers } from "@/lib/tailor-check";
@@ -18,19 +22,20 @@ import { recordUsage } from "@/lib/usage";
 
 export type TailorState = { error?: string; result?: Tailored };
 
-export type SaveCoverNoteResult =
+export type SaveEditResult =
   | { ok: true; text: string; unverified: string[]; editedAt: string }
   | { ok: false; error: string };
 
 /**
- * Saves the person's edit of the cover note, so the copy and the PDF/Word
- * downloads use it. Numbers are re-checked against the CV and evidence, so
- * a typed-in "50%" that isn't in the CV is still flagged. No model call.
+ * Applies the person's edit to the saved tailoring. Numbers are re-checked
+ * against the CV and evidence, so a typed-in "50%" that isn't in the CV is
+ * still flagged. No model call.
  */
-export async function saveCoverNote(
+async function saveEdit(
   analysisId: string,
   text: string,
-): Promise<SaveCoverNoteResult> {
+  part: "coverNote" | "cv",
+): Promise<SaveEditResult> {
   const session = await getSession();
   if (!session)
     return { ok: false, error: "Your session ended. Sign in again." };
@@ -53,24 +58,31 @@ export async function saveCoverNote(
     profile?.cvText ?? "",
     (analysis.evidence ?? []) as Evidence[],
   );
-  const next = withEditedCoverNote(
-    saved,
-    text,
-    unverifiedNumbers(text, sources),
-    new Date(),
-  );
+  const edit = part === "cv" ? withEditedCv : withEditedCoverNote;
+  const next = edit(saved, text, unverifiedNumbers(text, sources), new Date());
   if ("error" in next) return { ok: false, error: next.error };
 
   await db.analysis.update({
     where: { id: analysisId },
     data: { tailored: next as unknown as Prisma.InputJsonValue },
   });
+  const done = part === "cv" ? next.cv : next.coverNote;
   return {
     ok: true,
-    text: next.coverNote.text,
-    unverified: next.coverNote.unverified,
-    editedAt: next.coverNote.editedAt ?? new Date().toISOString(),
+    text: done?.text ?? "",
+    unverified: done?.unverified ?? [],
+    editedAt: done?.editedAt ?? new Date().toISOString(),
   };
+}
+
+/** Saves the edited cover note, which the copy and downloads then use. */
+export async function saveCoverNote(analysisId: string, text: string) {
+  return saveEdit(analysisId, text, "coverNote");
+}
+
+/** Saves the person's CV as edited for this job. Set up's CV is untouched. */
+export async function saveTailoredCv(analysisId: string, text: string) {
+  return saveEdit(analysisId, text, "cv");
 }
 
 export async function tailorApplication(
@@ -87,6 +99,7 @@ export async function tailorApplication(
     select: {
       evidence: true,
       jobId: true,
+      tailored: true,
       job: { select: { extracted: true } },
     },
   });
@@ -95,6 +108,8 @@ export async function tailorApplication(
   const job = JobExtraction.safeParse(analysis.job.extracted);
   if (!job.success)
     return { error: "This job's requirements couldn't be read." };
+  // Regenerating rewrites the bullets and note, never the edited CV.
+  const editedCv = readTailored(analysis.tailored)?.cv;
 
   const profile = await db.profile.findUnique({
     where: { userId: session.user.id },
@@ -103,12 +118,15 @@ export async function tailorApplication(
   if (!profile?.cvText) return { error: "Upload your CV in Set up first." };
 
   try {
-    const result = await generateTailored({
+    const generated = await generateTailored({
       job: job.data,
       evidence: (analysis.evidence ?? []) as Evidence[],
       cvText: profile.cvText,
       aiChoice: aiChoiceFrom(formData),
     });
+    const result: Tailored = editedCv
+      ? { ...generated, cv: editedCv }
+      : generated;
     // Saved so later visits show it without another model call.
     await db.analysis.update({
       where: { id: analysisId },
